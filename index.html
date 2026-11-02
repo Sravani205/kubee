@@ -43,19 +43,22 @@
 
   /* ---------- Flying Kubee ---------- */
   #flyer{position:fixed;z-index:25;width:min(300px,62vw);left:50%;top:44%;transform:translate(-50%,-50%);pointer-events:none}
-  #flyer.offstage{transform:translate(-50%,-50%) translateX(-120vw)}
-  #flyer.flying{animation:flyin 2.6s cubic-bezier(.45,.05,.3,1) forwards}
-  @keyframes flyin{
-    0%  {transform:translate(-50%,-50%) translate(-115vw,-25vh) rotate(-20deg)}
-    20% {transform:translate(-50%,-50%) translate(-70vw, 10vh) rotate(10deg)}
-    40% {transform:translate(-50%,-50%) translate(-35vw,-22vh) rotate(-12deg)}
-    60% {transform:translate(-50%,-50%) translate(-5vw, 14vh) rotate(12deg)}
-    78% {transform:translate(-50%,-50%) translate(12vw,-10vh) rotate(-8deg)}
-    90% {transform:translate(-50%,-50%) translate(-3vw, 3vh) rotate(4deg)}
-    100%{transform:translate(-50%,-50%) translate(0,0) rotate(0)}
+  #flyer.offstage{opacity:0;transform:translate(-50%,-50%) scale(.15)}
+  #flyer.popin{animation:popin .85s cubic-bezier(.3,1.6,.5,1) forwards}
+  @keyframes popin{
+    0%  {opacity:0;transform:translate(-50%,-50%) scale(.12) rotate(-14deg)}
+    55% {opacity:1;transform:translate(-50%,-50%) scale(1.08) rotate(4deg)}
+    100%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}
   }
+  /* tiny scout bee that zips around before Kubee appears */
+  #mini{position:fixed;z-index:27;left:0;top:0;width:66px;pointer-events:none;will-change:transform;opacity:0}
+  #mini svg{display:block;width:100%;height:auto}
+  #mini .mw{transform-box:fill-box;transform-origin:bottom center;animation:flap .06s linear infinite alternate}
+  .trail{position:fixed;z-index:26;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;pointer-events:none;animation:trail .9s ease-out forwards}
+  @keyframes trail{from{opacity:.85;transform:scale(1)}to{opacity:0;transform:scale(.2)}}
+  .burst{position:fixed;z-index:28;pointer-events:none;font-size:20px;margin:-12px 0 0 -12px;animation:burst .8s ease-out forwards}
+  @keyframes burst{from{opacity:1;transform:translate(0,0) scale(.6)}to{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1.2)}}
   #flyer.docking{transition:left .9s cubic-bezier(.5,0,.2,1),top .9s cubic-bezier(.5,0,.2,1),width .9s cubic-bezier(.5,0,.2,1),transform .9s cubic-bezier(.5,0,.2,1)}
-  #flyer.flying .wing{animation-duration:.08s}
 
   #introBubble{position:fixed;z-index:26;left:50%;top:calc(44% + min(170px,36vw));transform:translateX(-50%);width:min(520px,90vw);
     background:#fff;border:3px solid var(--ink);border-radius:22px;padding:16px 20px;box-shadow:6px 6px 0 var(--honey);
@@ -238,6 +241,20 @@
   </div>
   <div class="shadow"></div>
 </div>
+<div id="mini" aria-hidden="true">
+  <svg viewBox="0 0 64 52">
+    <ellipse class="mw" cx="27" cy="14" rx="9" ry="13" fill="#DFF3FF" stroke="#1F2A44" stroke-width="2.5" transform="rotate(-20 27 14)"/>
+    <ellipse class="mw" cx="37" cy="13" rx="9" ry="13" fill="#DFF3FF" stroke="#1F2A44" stroke-width="2.5" transform="rotate(18 37 13)"/>
+    <path d="M8 32 L1 32" stroke="#1F2A44" stroke-width="3" stroke-linecap="round"/>
+    <ellipse cx="31" cy="32" rx="22" ry="15" fill="#FFC93C" stroke="#1F2A44" stroke-width="3"/>
+    <path d="M24 18.5 Q20 32 24 45.5" fill="none" stroke="#1F2A44" stroke-width="5"/>
+    <path d="M34 17.5 Q30 32 34 46.5" fill="none" stroke="#1F2A44" stroke-width="5"/>
+    <circle cx="45" cy="28" r="3.2" fill="#1F2A44"/><circle cx="46" cy="27" r="1" fill="#fff"/>
+    <path d="M44 36 Q47 38.5 50 36" fill="none" stroke="#1F2A44" stroke-width="2" stroke-linecap="round"/>
+    <path d="M49 19 Q53 10 58 9" fill="none" stroke="#1F2A44" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="58.5" cy="8.5" r="3" fill="#FF6B9A"/>
+  </svg>
+</div>
 <div id="introBubble" class="hidden" aria-live="polite"></div>
 
 <div id="app" class="hidden">
@@ -377,19 +394,20 @@ const ANSWERS = {
   },
   roles: {
     q: "What roles is she looking for?",
-    keys: ["looking","roles","position","target","seeking","want","interested","available"],
+    keys: ["looking","roles","position","target","seeking","want","interested","available","start date","when can she start","join"],
     html: `<b>Site Reliability Engineer</b>, <b>DevOps / Platform Engineer</b>, <b>Cloud / Kubernetes Engineer</b>, and <b>Cloud Support Engineer</b> roles. She's available and ready to start.`,
     say: "She's looking for Site Reliability, DevOps or Platform, Cloud and Kubernetes, and Cloud Support Engineer roles."
   },
   hobbies: {
     q: "What are her hobbies?",
-    keys: ["hobby","hobbies","free time","fun","interest","weekend","outside work","cook","paint","personal"],
+    keys: ["hobby","hobbies","free time","fun","interest","weekend","outside work","cook","paint","clay","craft","artwork","personal"],
     html: `When she's not keeping clusters healthy, Sravani loves:
       <ul>
         <li>🍳 <b>Cooking</b></li>
-        <li>🎨 <b>Painting</b></li></ul>
+        <li>🎨 <b>Painting</b></li>
+        <li>🏺 <b>Mini clay art</b></li></ul>
       Fun fact: she helped design me, so the creative side shows! 🐝`,
-    say: "When she's not keeping clusters healthy, Sravani loves cooking and painting. And her creative side helped design me!"
+    say: "When she's not keeping clusters healthy, Sravani loves cooking, painting, and making mini clay art. And her creative side helped design me!"
   },
   contact: {
     q: "How do I contact her?",
@@ -400,22 +418,22 @@ const ANSWERS = {
 };
 const FALLBACK = {
   q:"Hmm, buzzing on that one!",
-  html:`I don't have that answer in my hive yet. Try one of the questions below, or <a href="mailto:sravaniella205@gmail.com">email Sravani</a> directly. She'd love to hear from you!`,
-  say:"I don't have that answer yet. Try one of the suggested questions, or email Sravani directly."
+  html:`I don't have that answer in my hive yet. Tap a bubble on the map, or <a href="mailto:sravaniella205@gmail.com">email Sravani</a> directly. She'd love to hear from you!`,
+  say:"I don't have that answer yet. Tap a bubble on the map, or email Sravani directly."
 };
 
 const GREETING = {
   q:"Hello there! 👋",
-  html:`Hi, I'm <b>Kubee</b> 🐝, Sravani's personal assistant! Tap any bubble on the map or ask me anything about her experience, skills and projects.`,
-  say:"Hi! I'm Kubee, Sravani's personal assistant. Tap any bubble on the map, or ask me anything about her experience, skills and projects."
+  html:`Hi, I'm <b>Kubee</b> 🐝, Sravani's friend! Tap any bubble on the map or ask me anything about her experience, skills and projects.`,
+  say:"Hi! I'm Kubee, Sravani's friend. Tap any bubble on the map, or ask me anything about her experience, skills and projects."
 };
 const GREET_RE=/^\s*(hi+|hello+|hey+|hiya|howdy|greetings|good\s+(morning|afternoon|evening|day)|namaste|yo)\b[\s!.,?]*(kubee|there|everyone|all)?[\s!.,?]*$/i;
 
 const INTRO = [
   {html:`<b>Hello, and a warm welcome!</b> 👋<br>It's so lovely to have you here.`,
    say:"Hello, and a warm welcome! It's so lovely to have you here."},
-  {html:`I'm <b>Kubee</b> 🐝, Sravani's friendly assistant. Let me show you around her work: her experience, Kubernetes skills, projects and more!`,
-   say:"I'm Kubee, Sravani's friendly assistant. Let me show you around her work: her experience, Kubernetes skills, projects and more!"}
+  {html:`I'm <b>Kubee</b> 🐝, Sravani's friend. Let me show you around her work: her experience, skills, projects and more!`,
+   say:"I'm Kubee, Sravani's friend. Let me show you around her work: her experience, skills, projects and more!"}
 ];
 
 // Flow map bubbles
@@ -473,20 +491,72 @@ let introDone=false, introRun=0;
 
 function wave(){ flyer.classList.remove('waving'); void flyer.offsetWidth; flyer.classList.add('waving'); setTimeout(()=>flyer.classList.remove('waving'),1600); }
 
+const mini=document.getElementById('mini');
+let miniRAF=null, trailTimer=0;
+const TRAIL_COLORS=['#FFC93C','#FF6B9A','#9B7BFF','#2EC4B6','#5B8DEF'];
+
+// Smooth curve (Catmull-Rom) through points given as fractions of the screen
+function cr(p0,p1,p2,p3,t){const t2=t*t,t3=t2*t;return .5*((2*p1)+(-p0+p2)*t+(2*p0-5*p1+4*p2-p3)*t2+(-p0+3*p1-3*p2+p3)*t3);}
+function pathPoint(P,u){
+  const n=P.length-1, f=Math.min(u*n, n-1e-6), i=Math.floor(f), t=f-i;
+  const p0=P[Math.max(i-1,0)],p1=P[i],p2=P[i+1],p3=P[Math.min(i+2,n)];
+  return [cr(p0[0],p1[0],p2[0],p3[0],t), cr(p0[1],p1[1],p2[1],p3[1],t)];
+}
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+
+function flyMini(run, done){
+  const W=innerWidth, H=innerHeight, cx=.5, cy=.44;
+  const P=[[-.08,.30],[.18,.14],[.40,.30],[.26,.62],[.52,.80],[.80,.62],[.88,.30],[.66,.16],[.56,.34],[cx,cy]];
+  const DUR=4200; let t0=null, lastX=null, dir=1;
+  mini.style.opacity=1;
+  function frame(now){
+    if(run!==introRun){ mini.style.opacity=0; return; }
+    if(t0===null) t0=now;
+    const raw=Math.min((now-t0)/DUR,1), u=ease(raw);
+    let [x,y]=pathPoint(P,u); x*=W; y*=H;
+    y+=Math.sin(now/90)*4*(1-raw);                        // gentle hover bob
+    if(lastX!==null && Math.abs(x-lastX)>0.4) dir = x>lastX ? 1 : -1;  // face the direction of travel
+    const ny=pathPoint(P,Math.min(u+.01,1))[1]*H; const tilt=Math.max(-20,Math.min(20,(ny-y)*0.9));
+    mini.style.transform=`translate(${x-33}px,${y-27}px) scaleX(${dir}) rotate(${dir*tilt}deg)`;
+    lastX=x;
+    if(now-trailTimer>55 && raw<.97){ trailTimer=now; dropTrail(x-dir*28,y+5); }
+    if(raw<1) miniRAF=requestAnimationFrame(frame); else done(x,y);
+  }
+  miniRAF=requestAnimationFrame(frame);
+}
+function dropTrail(x,y){
+  const d=document.createElement('div'); d.className='trail';
+  d.style.left=x+'px'; d.style.top=y+'px'; d.style.background=TRAIL_COLORS[Math.floor(Math.random()*TRAIL_COLORS.length)];
+  document.body.appendChild(d); setTimeout(()=>d.remove(),950);
+}
+function burst(x,y){
+  const icons=['✨','⭐','💛','✨','🌼','✨','⭐','💫'];
+  icons.forEach((ic,i)=>{
+    const a=i/icons.length*Math.PI*2, r=90+Math.random()*40;
+    const e=document.createElement('div'); e.className='burst'; e.textContent=ic;
+    e.style.left=x+'px'; e.style.top=y+'px';
+    e.style.setProperty('--dx',Math.cos(a)*r+'px'); e.style.setProperty('--dy',Math.sin(a)*r+'px');
+    document.body.appendChild(e); setTimeout(()=>e.remove(),850);
+  });
+}
+
 function startIntro(){
   const run=++introRun; introDone=false;
   document.body.classList.add('intro');
   splash.classList.add('hidden'); skipBtn.classList.remove('hidden');
-  app.classList.add('hidden'); resetMap();
-  // put Kubee back on the fixed stage
+  app.classList.add('hidden'); resetMap(); introBubble.classList.add('hidden');
   undock();
-  flyer.classList.remove('docking','offstage'); flyer.classList.add('flying');
-  setTimeout(()=>{
+  flyer.classList.remove('docking','popin','happy','talking'); flyer.classList.add('offstage');
+  flyMini(run,(x,y)=>{
     if(run!==introRun) return;
-    flyer.classList.remove('flying');
-    flyer.classList.add('happy'); wave();
-    showIntroLine(0, run);
-  }, 2650);
+    mini.style.opacity=0; burst(x,y);
+    flyer.classList.remove('offstage'); flyer.classList.add('popin');
+    setTimeout(()=>{
+      if(run!==introRun) return;
+      flyer.classList.add('happy'); wave();
+      showIntroLine(0, run);
+    }, 850);
+  });
 }
 function showIntroLine(i, run){
   if(run!==introRun) return;
@@ -498,7 +568,8 @@ function showIntroLine(i, run){
 function finishIntro(){
   if(introDone) return; introDone=true; introRun++;
   if(window.speechSynthesis) speechSynthesis.cancel();
-  flyer.classList.remove('flying','offstage','happy','talking');
+  cancelAnimationFrame(miniRAF); mini.style.opacity=0;
+  flyer.classList.remove('offstage','popin','happy','talking');
   introBubble.classList.add('hidden'); splash.classList.add('hidden'); skipBtn.classList.add('hidden');
   app.classList.remove('hidden'); document.body.classList.remove('intro');
   window.scrollTo(0,0);
