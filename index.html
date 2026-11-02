@@ -63,6 +63,15 @@
   .talking #mouth{animation:talk .22s ease-in-out infinite alternate}
   @keyframes talk{from{transform:scaleY(.4)}to{transform:scaleY(1.2)}}
   #mouth{transform-box:fill-box;transform-origin:center}
+  #mouth{opacity:0}
+  .talking #mouth{opacity:1}
+  #smile{transition:opacity .1s}
+  .talking #smile{opacity:0}
+  .happyeye{opacity:0;transition:opacity .15s}
+  .happy .happyeye{opacity:1}
+  .happy .eye{opacity:0}
+  .happy #kubee{animation:float 3.2s ease-in-out infinite, hop .45s ease-out 2}
+  @keyframes hop{0%,100%{translate:0 0}50%{translate:0 -22px}}
   .eye{transform-box:fill-box;transform-origin:center;animation:blink 4.5s infinite}
   @keyframes blink{0%,94%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
   .shadow{width:160px;height:18px;border-radius:50%;background:rgba(31,42,68,.12);margin-top:-6px;animation:shadow 3.2s ease-in-out infinite}
@@ -163,7 +172,13 @@
       <g class="eye"><ellipse cx="156" cy="124" rx="11" ry="14" fill="#1F2A44"/><circle cx="160" cy="118" r="4" fill="#fff"/></g>
       <g class="eye"><ellipse cx="200" cy="124" rx="11" ry="14" fill="#1F2A44"/><circle cx="204" cy="118" r="4" fill="#fff"/></g>
       <!-- mouth -->
-      <ellipse id="mouth" cx="178" cy="152" rx="10" ry="7" fill="#C2185B" stroke="#1F2A44" stroke-width="3"/>
+      <!-- happy closed-eye arcs (shown on greeting) -->
+      <path class="happyeye" d="M145 126 Q156 110 167 126" fill="none" stroke="#1F2A44" stroke-width="5" stroke-linecap="round"/>
+      <path class="happyeye" d="M189 126 Q200 110 211 126" fill="none" stroke="#1F2A44" stroke-width="5" stroke-linecap="round"/>
+      <!-- smiling mouth (default) -->
+      <path id="smile" d="M160 145 Q178 172 196 145 Q178 153 160 145 Z" fill="#C2185B" stroke="#1F2A44" stroke-width="3" stroke-linejoin="round"/>
+      <!-- open mouth (while talking) -->
+      <ellipse id="mouth" cx="178" cy="154" rx="10" ry="8" fill="#C2185B" stroke="#1F2A44" stroke-width="3"/>
       <!-- right arm with wand -->
       <g id="arm">
         <path d="M252 222 Q280 214 292 190" fill="none" stroke="#1F2A44" stroke-width="6" stroke-linecap="round"/>
@@ -321,6 +336,12 @@ const bubble = document.getElementById('bubble');
 const chips = document.getElementById('chips');
 const voiceOn = document.getElementById('voiceOn');
 
+{
+  const hi=document.createElement('button');
+  hi.className='chip'; hi.type='button'; hi.textContent='Say hi to Kubee 👋';
+  hi.onclick=()=>answer(GREETING,'Hi Kubee!');
+  chips.appendChild(hi);
+}
 Object.entries(ANSWERS).forEach(([id,a])=>{
   const b=document.createElement('button');
   b.className='chip'; b.type='button'; b.textContent=a.q;
@@ -328,7 +349,15 @@ Object.entries(ANSWERS).forEach(([id,a])=>{
   chips.appendChild(b);
 });
 
+const GREETING = {
+  q:"Hello there! 👋",
+  html:`Hi, I'm <b>Kubee</b> 🐝, Sravani's personal assistant! I'm a busy little bee who knows all about her work: her <b>Kubernetes</b> experience, skills, projects, certifications and what roles she's looking for. Ask me anything, or tap a question below to get started!`,
+  say:"Hi! I'm Kubee, Sravani's personal assistant. I'm a busy little bee who knows all about her Kubernetes experience, skills and projects. Ask me anything!"
+};
+const GREET_RE=/^\s*(hi+|hello+|hey+|hiya|howdy|greetings|good\s+(morning|afternoon|evening|day)|namaste|yo)\b[\s!.,?]*(kubee|there|everyone|all)?[\s!.,?]*$/i;
+
 function match(text){
+  if(GREET_RE.test(text)) return GREETING;
   const t=text.toLowerCase();
   let best=null, score=0;
   for(const a of Object.values(ANSWERS)){
@@ -343,14 +372,29 @@ function loadVoices(){ voices = window.speechSynthesis ? speechSynthesis.getVoic
 if(window.speechSynthesis){ loadVoices(); speechSynthesis.onvoiceschanged=loadVoices; }
 function pickVoice(){
   const en=voices.filter(v=>/^en/i.test(v.lang));
-  const female=/samantha|victoria|karen|moira|tessa|serena|zira|aria|jenny|female|susan|allison|ava|google us english/i;
-  return en.find(v=>female.test(v.name)) || en[0] || null;
+  // Warmest-sounding female voices first (Edge natural voices, Mac, Chrome), then any female voice
+  const preferred=[/\bana\b/i, /jenny.*natural|aria.*natural|ava.*natural|emma.*natural/i,
+    /samantha/i, /google us english/i, /ava|allison|susan|zira|jenny|aria|karen|tessa|moira|serena|victoria|female/i];
+  for(const re of preferred){ const v=en.find(x=>re.test(x.name)); if(v) return v; }
+  return en[0] || null;
+}
+// Child-like voices (e.g. Edge's "Ana") already sound young, so they need less pitch lift
+function voiceTuning(v){
+  if(v && /\bana\b/i.test(v.name)) return {pitch:1.15, rate:0.98};
+  return {pitch:1.55, rate:1.0};   // little-girl lift for adult voices, slightly slower for warmth
 }
 
 function answer(a, asked){
   bubble.innerHTML = `<div class="q">${escapeHtml(asked)}</div><div>${a.html}</div>`;
   stage.classList.remove('waving'); void stage.offsetWidth; stage.classList.add('waving');
   setTimeout(()=>stage.classList.remove('waving'),1600);
+  if(a===GREETING){
+    stage.classList.add('happy');
+    clearTimeout(window._happyT);
+    window._happyT=setTimeout(()=>stage.classList.remove('happy'),2600);
+  } else {
+    stage.classList.remove('happy');
+  }
   speak(a.say);
 }
 function speak(text){
@@ -358,7 +402,7 @@ function speak(text){
   speechSynthesis.cancel();
   const u=new SpeechSynthesisUtterance(text);
   const v=pickVoice(); if(v) u.voice=v;
-  u.pitch=0.8; u.rate=1;
+  const t=voiceTuning(v); u.pitch=t.pitch; u.rate=t.rate;
   u.onstart=()=>stage.classList.add('talking');
   u.onend=u.onerror=()=>stage.classList.remove('talking');
   speechSynthesis.speak(u);
