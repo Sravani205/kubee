@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ask Kubee · Sravani Ella</title>
-<meta name="description" content="Sravani Ella – Site Reliability / DevOps / Kubernetes Engineer. Ask Kubee anything a recruiter would ask.">
+<meta name="description" content="Sravani Ella – Site Reliability / DevOps / Kubernetes Engineer. Meet Kubee and explore her work.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -13,123 +13,167 @@
     --pink:#FF6B9A; --lilac:#9B7BFF; --paper:#FFFDF6; --muted:#5d6680;
   }
   *{box-sizing:border-box;margin:0;padding:0}
+  html,body{min-height:100%}
   body{
-    font-family:'Nunito',system-ui,sans-serif;color:var(--ink);min-height:100vh;
+    font-family:'Nunito',system-ui,sans-serif;color:var(--ink);min-height:100vh;overflow-x:hidden;
     background:
       radial-gradient(circle at 10% 10%, #FFE9A8 0, transparent 40%),
       radial-gradient(circle at 90% 20%, #CDE0FF 0, transparent 40%),
       radial-gradient(circle at 80% 90%, #FFD3E2 0, transparent 40%),
       radial-gradient(circle at 15% 85%, #C9F5EF 0, transparent 40%),
       var(--paper);
-    overflow-x:hidden;
   }
-  /* honeycomb pattern */
   body::before{
     content:"";position:fixed;inset:0;pointer-events:none;opacity:.07;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='98' viewBox='0 0 56 98'%3E%3Cpath d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='%23F4A100' stroke-width='2'/%3E%3Cpath d='M28 0L28 34L0 50L0 84L28 100L56 84L56 50L28 34' fill='none' stroke='%23F4A100' stroke-width='2'/%3E%3C/svg%3E");
   }
-  header{max-width:1100px;margin:0 auto;padding:22px 20px 0;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-  .brand{font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.5rem}
-  .brand span{color:var(--honey-deep)}
-  .links{display:flex;gap:8px;flex-wrap:wrap}
-  .links a{
-    text-decoration:none;font-weight:700;font-size:.9rem;color:#fff;padding:8px 14px;border-radius:999px;
-    background:var(--ink);transition:transform .15s;
+  body.intro{overflow:hidden}
+
+  /* ---------- Splash ---------- */
+  #splash{position:fixed;inset:0;z-index:30;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;padding:20px;transition:opacity .5s}
+  #splash h2{font-family:'Fredoka',sans-serif;font-size:clamp(1.6rem,4vw,2.4rem)}
+  #splash p{color:var(--muted);font-weight:600}
+  #startBtn{font-family:'Fredoka',sans-serif;font-size:1.25rem;font-weight:600;border:3px solid var(--ink);background:var(--honey);color:var(--ink);
+    padding:14px 28px;border-radius:999px;cursor:pointer;box-shadow:5px 5px 0 var(--ink);transition:transform .15s,box-shadow .15s;animation:nudge 1.6s ease-in-out infinite}
+  #startBtn:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink)}
+  @keyframes nudge{0%,100%{scale:1}50%{scale:1.05}}
+  .hidden{opacity:0;pointer-events:none}
+  #skip{position:fixed;right:16px;bottom:16px;z-index:40;font:inherit;font-weight:700;font-size:.85rem;color:var(--muted);background:#fff;border:2px solid #d5d9e4;border-radius:999px;padding:6px 14px;cursor:pointer}
+  #skip:hover{border-color:var(--ink);color:var(--ink)}
+
+  /* ---------- Flying Kubee ---------- */
+  #flyer{position:fixed;z-index:25;width:min(300px,62vw);left:50%;top:44%;transform:translate(-50%,-50%);pointer-events:none}
+  #flyer.offstage{transform:translate(-50%,-50%) translateX(-120vw)}
+  #flyer.flying{animation:flyin 2.6s cubic-bezier(.45,.05,.3,1) forwards}
+  @keyframes flyin{
+    0%  {transform:translate(-50%,-50%) translate(-115vw,-25vh) rotate(-20deg)}
+    20% {transform:translate(-50%,-50%) translate(-70vw, 10vh) rotate(10deg)}
+    40% {transform:translate(-50%,-50%) translate(-35vw,-22vh) rotate(-12deg)}
+    60% {transform:translate(-50%,-50%) translate(-5vw, 14vh) rotate(12deg)}
+    78% {transform:translate(-50%,-50%) translate(12vw,-10vh) rotate(-8deg)}
+    90% {transform:translate(-50%,-50%) translate(-3vw, 3vh) rotate(4deg)}
+    100%{transform:translate(-50%,-50%) translate(0,0) rotate(0)}
   }
-  .links a:nth-child(1){background:#0A66C2}
-  .links a:nth-child(2){background:#24292f}
-  .links a:nth-child(3){background:var(--pink)}
-  .links a:hover{transform:translateY(-2px)}
+  #flyer.docking{transition:left .9s cubic-bezier(.5,0,.2,1),top .9s cubic-bezier(.5,0,.2,1),width .9s cubic-bezier(.5,0,.2,1),transform .9s cubic-bezier(.5,0,.2,1)}
+  #flyer.flying .wing{animation-duration:.08s}
 
-  main{max-width:1100px;margin:0 auto;padding:20px;display:grid;grid-template-columns:minmax(260px,400px) 1fr;gap:28px;align-items:center}
-  main>*{min-width:0}
-  @media (max-width:820px){main{grid-template-columns:1fr}#kubee{max-width:260px}}
+  #introBubble{position:fixed;z-index:26;left:50%;top:calc(44% + min(170px,36vw));transform:translateX(-50%);width:min(520px,90vw);
+    background:#fff;border:3px solid var(--ink);border-radius:22px;padding:16px 20px;box-shadow:6px 6px 0 var(--honey);
+    font-size:1.08rem;line-height:1.5;text-align:center;transition:opacity .4s}
+  #introBubble::before{content:"";position:absolute;left:50%;top:-26px;margin-left:-13px;border:13px solid transparent;border-bottom-color:var(--ink)}
+  #introBubble::after{content:"";position:absolute;left:50%;top:-19px;margin-left:-11px;border:11px solid transparent;border-bottom-color:#fff}
 
-  .stage{position:relative;display:flex;flex-direction:column;align-items:center}
-  #kubee{width:100%;max-width:360px;height:auto;animation:float 3.2s ease-in-out infinite;filter:drop-shadow(0 18px 18px rgba(31,42,68,.18))}
+  /* ---------- Kubee parts ---------- */
+  .kubee-svg{width:100%;height:auto;display:block;filter:drop-shadow(0 18px 18px rgba(31,42,68,.18))}
+  .floaty{animation:float 3.2s ease-in-out infinite}
   @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
   .wing{transform-box:fill-box;transform-origin:bottom center;animation:flap .18s ease-in-out infinite alternate}
   .wing.r{animation-delay:.09s}
   @keyframes flap{from{transform:rotate(-8deg) scaleY(1)}to{transform:rotate(8deg) scaleY(.85)}}
-  #arm{transform-box:view-box;transform-origin:262px 228px;transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+  #arm{transform-box:view-box;transform-origin:262px 228px}
   .waving #arm{animation:wave .5s ease-in-out 3}
   @keyframes wave{0%,100%{transform:rotate(0)}50%{transform:rotate(-28deg)}}
-  .sparkle{opacity:0}
+  .sparkle{opacity:0;transform-box:fill-box;transform-origin:center}
   .waving .sparkle{animation:spark .5s ease-out 3}
-  .sparkle:nth-of-type(2){animation-delay:.1s}.sparkle:nth-of-type(3){animation-delay:.2s}
   @keyframes spark{0%{opacity:0;transform:scale(.3)}50%{opacity:1;transform:scale(1.2)}100%{opacity:0;transform:scale(.6)}}
-  .sparkle{transform-box:fill-box;transform-origin:center}
-  #mouth{transition:all .1s}
-  .talking #mouth{animation:talk .22s ease-in-out infinite alternate}
+  #mouth{opacity:0;transform-box:fill-box;transform-origin:center}
+  .talking #mouth{opacity:1;animation:talk .22s ease-in-out infinite alternate}
   @keyframes talk{from{transform:scaleY(.4)}to{transform:scaleY(1.2)}}
-  #mouth{transform-box:fill-box;transform-origin:center}
-  #mouth{opacity:0}
-  .talking #mouth{opacity:1}
-  #smile{transition:opacity .1s}
   .talking #smile{opacity:0}
   .happyeye{opacity:0;transition:opacity .15s}
   .happy .happyeye{opacity:1}
   .happy .eye{opacity:0}
-  .happy #kubee{animation:float 3.2s ease-in-out infinite, hop .45s ease-out 2}
-  @keyframes hop{0%,100%{translate:0 0}50%{translate:0 -22px}}
   .eye{transform-box:fill-box;transform-origin:center;animation:blink 4.5s infinite}
   @keyframes blink{0%,94%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
-  .shadow{width:160px;height:18px;border-radius:50%;background:rgba(31,42,68,.12);margin-top:-6px;animation:shadow 3.2s ease-in-out infinite}
+  .shadow{width:55%;height:16px;border-radius:50%;background:rgba(31,42,68,.12);margin:-4px auto 0;animation:shadow 3.2s ease-in-out infinite}
   @keyframes shadow{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.8)}}
 
-  .panel{display:flex;flex-direction:column;gap:16px}
-  h1{font-family:'Fredoka',sans-serif;font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.1}
-  h1 .hl{background:linear-gradient(90deg,var(--honey-deep),var(--pink),var(--lilac));-webkit-background-clip:text;background-clip:text;color:transparent}
-  .sub{color:var(--muted);font-weight:600}
-  .bubble{
-    position:relative;background:#fff;border:3px solid var(--ink);border-radius:22px;padding:18px 20px;min-height:150px;
-    box-shadow:6px 6px 0 var(--honey);font-size:1.02rem;line-height:1.55;
-  }
-  .bubble::before{content:"";position:absolute;left:-16px;top:40px;border:13px solid transparent;border-right-color:var(--ink)}
-  .bubble::after{content:"";position:absolute;left:-10px;top:42px;border:11px solid transparent;border-right-color:#fff}
-  @media (max-width:820px){.bubble::before{left:40px;top:-26px;border-right-color:transparent;border-bottom-color:var(--ink)}.bubble::after{left:42px;top:-21px;border-right-color:transparent;border-bottom-color:#fff}}
+  /* ---------- Main layout ---------- */
+  #app{transition:opacity .6s}
+  header{max-width:1200px;margin:0 auto;padding:22px 20px 0;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .brand{font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.5rem}
+  .brand span{color:var(--honey-deep)}
+  .links{display:flex;gap:8px;flex-wrap:wrap}
+  .links a{text-decoration:none;font-weight:700;font-size:.9rem;color:#fff;padding:8px 14px;border-radius:999px;transition:transform .15s}
+  .links a:nth-child(1){background:#0A66C2}.links a:nth-child(2){background:#24292f}.links a:nth-child(3){background:var(--pink)}
+  .links a:hover{transform:translateY(-2px)}
+  main{max-width:1200px;margin:0 auto;padding:16px 20px 10px;display:grid;grid-template-columns:minmax(280px,380px) 1fr;gap:30px;align-items:start}
+  main>*{min-width:0}
+  @media (max-width:900px){main{grid-template-columns:1fr}}
+  .left{display:flex;flex-direction:column;align-items:center;gap:14px;position:sticky;top:12px}
+  @media (max-width:900px){.left{position:static}}
+  #beeSlot{width:min(240px,55vw);aspect-ratio:1/1}
+  .bubble{position:relative;width:100%;background:#fff;border:3px solid var(--ink);border-radius:22px;padding:16px 18px;min-height:140px;
+    box-shadow:6px 6px 0 var(--honey);font-size:1rem;line-height:1.55}
+  .bubble::before{content:"";position:absolute;left:50%;top:-26px;margin-left:-13px;border:13px solid transparent;border-bottom-color:var(--ink)}
+  .bubble::after{content:"";position:absolute;left:50%;top:-19px;margin-left:-11px;border:11px solid transparent;border-bottom-color:#fff}
   .bubble .q{font-family:'Fredoka',sans-serif;color:var(--sky);font-weight:600;margin-bottom:6px}
   .bubble ul{margin:6px 0 0 18px}
-  .bubble b{color:var(--ink)}
-  .chips{display:flex;flex-wrap:wrap;gap:8px}
-  .chip{
-    font:inherit;font-weight:700;font-size:.9rem;border:2px solid var(--ink);background:#fff;color:var(--ink);
-    padding:7px 13px;border-radius:999px;cursor:pointer;transition:all .15s;
+  .bubble a{color:var(--sky);font-weight:700}
+
+  .right{display:flex;flex-direction:column;gap:14px}
+  h1{font-family:'Fredoka',sans-serif;font-size:clamp(1.7rem,3.6vw,2.4rem);line-height:1.1}
+  h1 .hl{background:linear-gradient(90deg,var(--honey-deep),var(--pink),var(--lilac));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:var(--muted);font-weight:600}
+
+  /* Flow map */
+  #map{position:relative;width:100%;max-width:700px;aspect-ratio:6/5;margin:0 auto}
+  #lines{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+  #lines line{stroke:var(--ink);stroke-width:.35;stroke-dasharray:1.2 1.2;opacity:0;transition:opacity .4s}
+  #lines line.on{opacity:.35}
+  #lines line.active{opacity:1;stroke:var(--honey-deep);stroke-width:.7;stroke-dasharray:none}
+  .node{position:absolute;transform:translate(-50%,-50%) scale(0);transition:transform .45s cubic-bezier(.3,1.7,.5,1);
+    font:inherit;font-weight:700;font-size:.92rem;border:2.5px solid var(--ink);background:#fff;color:var(--ink);border-radius:999px;
+    padding:9px 14px;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:6px}
+  .node.in{transform:translate(-50%,-50%) scale(1)}
+  .node.in:hover,.node.in:focus-visible{transform:translate(-50%,-50%) scale(1.08);box-shadow:3px 3px 0 var(--ink);outline:none}
+  .node.active{background:var(--honey)}
+  .node .ic{font-size:1.1rem}
+  .center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(0);transition:transform .5s cubic-bezier(.3,1.6,.5,1);
+    width:23%;aspect-ratio:1/1;border-radius:50%;border:3px solid var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+    background:conic-gradient(from 200deg,#FFE9A8,#FFD3E2,#E4DBFF,#CDE0FF,#C9F5EF,#FFE9A8);box-shadow:5px 5px 0 var(--ink)}
+  .center.in{transform:translate(-50%,-50%) scale(1)}
+  .center b{font-family:'Fredoka',sans-serif;font-size:clamp(.95rem,2.2vw,1.25rem);line-height:1.1}
+  .center small{font-size:clamp(.65rem,1.4vw,.78rem);font-weight:700;color:var(--muted);margin-top:4px}
+  @media (max-width:620px){
+    #map{aspect-ratio:auto;display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:none}
+    #lines{display:none}
+    .center{position:static;grid-column:1/-1;width:auto;aspect-ratio:auto;border-radius:18px;padding:12px;transform:scale(0)}
+    .center.in{transform:scale(1)}
+    .node{position:static;transform:scale(0);justify-content:center;white-space:normal}
+    .node.in{transform:scale(1)}
+    .node.in:hover{transform:scale(1.04)}
   }
-  .chip:hover,.chip:focus-visible{transform:translateY(-2px);box-shadow:3px 3px 0 var(--ink);outline:none}
-  .chip:nth-child(5n+1):hover{background:#FFE9A8}.chip:nth-child(5n+2):hover{background:#CDE0FF}
-  .chip:nth-child(5n+3):hover{background:#C9F5EF}.chip:nth-child(5n+4):hover{background:#FFD3E2}.chip:nth-child(5n+5):hover{background:#E4DBFF}
-  .ask{display:flex;gap:8px}
-  .ask input{
-    flex:1;font:inherit;padding:12px 16px;border-radius:999px;border:2px solid var(--ink);background:#fff;min-width:0;
-  }
+
+  .ask{display:flex;gap:8px;max-width:640px;width:100%;margin:0 auto}
+  .ask input{flex:1;font:inherit;padding:12px 16px;border-radius:999px;border:2px solid var(--ink);background:#fff;min-width:0}
   .ask input:focus{outline:3px solid var(--honey);outline-offset:1px}
   .btn{font:inherit;font-weight:700;border:2px solid var(--ink);border-radius:999px;padding:0 16px;cursor:pointer;background:var(--honey);color:var(--ink)}
   .btn:hover{background:var(--honey-deep)}
   #mic{width:50px;padding:0;font-size:1.3rem;background:var(--mint)}
   #mic.listening{background:var(--pink);animation:pulse 1s infinite}
   @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,107,154,.6)}100%{box-shadow:0 0 0 14px rgba(255,107,154,0)}}
-  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:.88rem;color:var(--muted);font-weight:600}
-  .toggle{display:flex;align-items:center;gap:6px;cursor:pointer}
+  .row{display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap;font-size:.86rem;color:var(--muted);font-weight:600}
+  .row button{font:inherit;font-weight:700;background:none;border:none;color:var(--sky);cursor:pointer;text-decoration:underline}
   footer{text-align:center;padding:24px 16px 30px;color:var(--muted);font-size:.85rem}
   .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
-<body>
-<header>
-  <div class="brand">Sravani <span>Ella</span></div>
-  <nav class="links">
-    <a href="https://www.linkedin.com/in/sravani-ella" target="_blank" rel="noopener">LinkedIn</a>
-    <a href="https://github.com/Sravani205" target="_blank" rel="noopener">GitHub</a>
-    <a href="mailto:sravaniella205@gmail.com">Email me</a>
-  </nav>
-</header>
+<body class="intro">
 
-<main>
-  <div class="stage" id="stage">
-    <!-- Kubee the bee: original SVG -->
-    <svg id="kubee" viewBox="0 0 360 360" role="img" aria-label="Kubee, a friendly bee holding a magic wand">
+<!-- Splash: one tap so the browser allows Kubee's voice -->
+<div id="splash">
+  <h2>Someone's buzzing in to meet you… 🐝</h2>
+  <p>Turn your sound on for the full experience.</p>
+  <button id="startBtn" type="button">👋 Meet Kubee</button>
+</div>
+<button id="skip" type="button" class="hidden">Skip intro ⏭</button>
+
+<!-- Kubee (flies in, then docks into the page) -->
+<div id="flyer" class="offstage">
+  <div id="beeBox" class="floaty">
+    <svg id="kubee" class="kubee-svg" viewBox="0 0 360 360" role="img" aria-label="Kubee, a friendly bee holding a magic wand">
       <!-- wings -->
       <g opacity=".85">
         <ellipse class="wing l" cx="140" cy="118" rx="38" ry="58" fill="#DFF3FF" stroke="#1F2A44" stroke-width="4" transform="rotate(-25 140 118)"/>
@@ -191,37 +235,56 @@
         </g>
       </g>
     </svg>
-    <div class="shadow"></div>
   </div>
+  <div class="shadow"></div>
+</div>
+<div id="introBubble" class="hidden" aria-live="polite"></div>
 
-  <section class="panel">
-    <div>
-      <h1>Hi, I'm Kubee 🐝<br><span class="hl">Ask me about Sravani!</span></h1>
-      <p class="sub">Site Reliability · DevOps · Kubernetes Engineer · St. Louis, MO</p>
-    </div>
+<div id="app" class="hidden">
+  <header>
+    <div class="brand">Sravani <span>Ella</span></div>
+    <nav class="links">
+      <a href="https://www.linkedin.com/in/sravani-ella" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/Sravani205" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:sravaniella205@gmail.com">Email me</a>
+    </nav>
+  </header>
 
-    <div class="bubble" id="bubble" aria-live="polite">
-      <div class="q">Buzz buzz! 👋</div>
-      <div id="answer">I'm Kubee, Sravani's assistant. Tap a question below, type your own, or press 🎤 and ask me out loud. I'll answer like a recruiter screen, minus the scheduling emails!</div>
-    </div>
+  <main>
+    <aside class="left">
+      <div id="beeSlot"></div>
+      <div class="bubble" id="bubble" aria-live="polite">
+        <div class="q">Buzz buzz! 👋</div>
+        <div>Tap any bubble on the map, type a question, or press 🎤 and ask me out loud.</div>
+      </div>
+    </aside>
 
-    <div class="chips" id="chips" aria-label="Suggested questions"></div>
+    <section class="right">
+      <div>
+        <h1>Explore <span class="hl">Sravani's world</span></h1>
+        <p class="sub">Site Reliability · DevOps · Kubernetes Engineer · St. Louis, MO</p>
+      </div>
 
-    <form class="ask" id="askForm">
-      <label for="askInput" class="sr">Ask a question</label>
-      <input id="askInput" type="text" placeholder="e.g. What Kubernetes work has she done?" autocomplete="off">
-      <button class="btn" type="submit">Ask</button>
-      <button class="btn" type="button" id="mic" title="Ask out loud" aria-label="Ask with your voice">🎤</button>
-    </form>
+      <div id="map" aria-label="Topics about Sravani">
+        <svg id="lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg>
+        <div class="center" id="centerNode"><b>Sravani<br>Ella</b><small>SRE · DevOps · K8s</small></div>
+      </div>
 
-    <div class="row">
-      <label class="toggle"><input type="checkbox" id="voiceOn" checked> Kubee speaks answers</label>
-      <span id="micNote"></span>
-    </div>
-  </section>
-</main>
-
-<footer>Built by Sravani Ella · Kubee is an original character · Hosted on GitHub Pages</footer>
+      <form class="ask" id="askForm">
+        <label for="askInput" class="sr">Ask a question</label>
+        <input id="askInput" type="text" placeholder="Ask Kubee anything…" autocomplete="off">
+        <button class="btn" type="submit">Ask</button>
+        <button class="btn" type="button" id="mic" title="Ask out loud" aria-label="Ask with your voice">🎤</button>
+      </form>
+      <div class="row">
+        <label><input type="checkbox" id="voiceOn" checked> Kubee speaks answers</label>
+        <button type="button" id="replay">Replay intro</button>
+        <span id="micNote"></span>
+      </div>
+    </section>
+  </main>
+  <footer>Built by Sravani Ella · Kubee is an original character · Hosted on GitHub Pages</footer>
+</div>
 
 <script>
 const ANSWERS = {
@@ -318,6 +381,16 @@ const ANSWERS = {
     html: `<b>Site Reliability Engineer</b>, <b>DevOps / Platform Engineer</b>, <b>Cloud / Kubernetes Engineer</b>, and <b>Cloud Support Engineer</b> roles. She's available and ready to start.`,
     say: "She's looking for Site Reliability, DevOps or Platform, Cloud and Kubernetes, and Cloud Support Engineer roles."
   },
+  hobbies: {
+    q: "What are her hobbies?",
+    keys: ["hobby","hobbies","free time","fun","interest","weekend","outside work","cook","paint","personal"],
+    html: `When she's not keeping clusters healthy, Sravani loves:
+      <ul>
+        <li>🍳 <b>Cooking</b></li>
+        <li>🎨 <b>Painting</b></li></ul>
+      Fun fact: she helped design me, so the creative side shows! 🐝`,
+    say: "When she's not keeping clusters healthy, Sravani loves cooking and painting. And her creative side helped design me!"
+  },
   contact: {
     q: "How do I contact her?",
     keys: ["contact","email","phone","reach","call","linkedin","connect","resume"],
@@ -331,95 +404,184 @@ const FALLBACK = {
   say:"I don't have that answer yet. Try one of the suggested questions, or email Sravani directly."
 };
 
-const stage = document.getElementById('stage');
-const bubble = document.getElementById('bubble');
-const chips = document.getElementById('chips');
-const voiceOn = document.getElementById('voiceOn');
-
-{
-  const hi=document.createElement('button');
-  hi.className='chip'; hi.type='button'; hi.textContent='Say hi to Kubee 👋';
-  hi.onclick=()=>answer(GREETING,'Hi Kubee!');
-  chips.appendChild(hi);
-}
-Object.entries(ANSWERS).forEach(([id,a])=>{
-  const b=document.createElement('button');
-  b.className='chip'; b.type='button'; b.textContent=a.q;
-  b.onclick=()=>answer(a, a.q);
-  chips.appendChild(b);
-});
-
 const GREETING = {
   q:"Hello there! 👋",
-  html:`Hi, I'm <b>Kubee</b> 🐝, Sravani's personal assistant! I'm a busy little bee who knows all about her work: her <b>Kubernetes</b> experience, skills, projects, certifications and what roles she's looking for. Ask me anything, or tap a question below to get started!`,
-  say:"Hi! I'm Kubee, Sravani's personal assistant. I'm a busy little bee who knows all about her Kubernetes experience, skills and projects. Ask me anything!"
+  html:`Hi, I'm <b>Kubee</b> 🐝, Sravani's personal assistant! Tap any bubble on the map or ask me anything about her experience, skills and projects.`,
+  say:"Hi! I'm Kubee, Sravani's personal assistant. Tap any bubble on the map, or ask me anything about her experience, skills and projects."
 };
 const GREET_RE=/^\s*(hi+|hello+|hey+|hiya|howdy|greetings|good\s+(morning|afternoon|evening|day)|namaste|yo)\b[\s!.,?]*(kubee|there|everyone|all)?[\s!.,?]*$/i;
 
+const INTRO = [
+  {html:`<b>Hello, and a warm welcome!</b> 👋<br>It's so lovely to have you here.`,
+   say:"Hello, and a warm welcome! It's so lovely to have you here."},
+  {html:`I'm <b>Kubee</b> 🐝, Sravani's friendly assistant. Let me show you around her work: her experience, Kubernetes skills, projects and more!`,
+   say:"I'm Kubee, Sravani's friendly assistant. Let me show you around her work: her experience, Kubernetes skills, projects and more!"}
+];
+
+// Flow map bubbles
+const NODES = [
+  {key:"intro",      icon:"🙋‍♀️", label:"About me"},
+  {key:"experience", icon:"💼", label:"Experience"},
+  {key:"k8s",        icon:"☸️", label:"Kubernetes"},
+  {key:"skills",     icon:"🛠️", label:"Skills"},
+  {key:"projects",   icon:"🚀", label:"Projects"},
+  {key:"certs",      icon:"🏅", label:"Certifications"},
+  {key:"education",  icon:"🎓", label:"Education"},
+  {key:"why",        icon:"⭐", label:"Why hire me"},
+  {key:"roles",      icon:"🎯", label:"Looking for"},
+  {key:"location",   icon:"📍", label:"Location"},
+  {key:"hobbies",    icon:"🎨", label:"Hobbies"},
+  {key:"contact",    icon:"📬", label:"Contact"}
+];
+
+/* ---------- Voice ---------- */
+let voices=[];
+function loadVoices(){ voices = window.speechSynthesis ? speechSynthesis.getVoices() : []; }
+if(window.speechSynthesis){ loadVoices(); speechSynthesis.onvoiceschanged=loadVoices; }
+function pickVoice(){
+  const en=voices.filter(v=>/^en/i.test(v.lang));
+  // Sravani's pick: Karen (comes with every Mac). Backups for Windows/Android/other browsers.
+  const preferred=[/^karen\b/i, /^samantha\b/i, /jenny.*natural|aria.*natural|ava.*natural|emma.*natural/i,
+    /google us english/i, /google uk english female/i, /zira|jenny|aria|ava|allison|susan|tessa|moira|female/i];
+  for(const re of preferred){ const v=en.find(x=>re.test(x.name)); if(v) return v; }
+  return en[0] || null;
+}
+const TONE={pitch:1.25, rate:0.98};   // "Bright & youthful"
+const voiceOn=document.getElementById('voiceOn');
+const flyer=document.getElementById('flyer');
+
+// speak(text, done): calls done when finished; falls back to a reading-time timer without voice
+function speak(text, done){
+  let finished=false;
+  const finish=()=>{ if(finished) return; finished=true; flyer.classList.remove('talking'); if(done) done(); };
+  const readMs=Math.max(2200, text.length*62);
+  if(!voiceOn.checked || !window.speechSynthesis){ setTimeout(finish, done?readMs:0); return; }
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v) u.voice=v;
+  u.pitch=TONE.pitch; u.rate=TONE.rate;
+  u.onstart=()=>flyer.classList.add('talking');
+  u.onend=finish; u.onerror=finish;
+  speechSynthesis.speak(u);
+  if(done) setTimeout(finish, readMs+4000); // safety net if the browser never fires onend
+}
+
+/* ---------- Intro sequence ---------- */
+const splash=document.getElementById('splash'), skipBtn=document.getElementById('skip');
+const introBubble=document.getElementById('introBubble'), app=document.getElementById('app');
+let introDone=false, introRun=0;
+
+function wave(){ flyer.classList.remove('waving'); void flyer.offsetWidth; flyer.classList.add('waving'); setTimeout(()=>flyer.classList.remove('waving'),1600); }
+
+function startIntro(){
+  const run=++introRun; introDone=false;
+  document.body.classList.add('intro');
+  splash.classList.add('hidden'); skipBtn.classList.remove('hidden');
+  app.classList.add('hidden'); resetMap();
+  // put Kubee back on the fixed stage
+  undock();
+  flyer.classList.remove('docking','offstage'); flyer.classList.add('flying');
+  setTimeout(()=>{
+    if(run!==introRun) return;
+    flyer.classList.remove('flying');
+    flyer.classList.add('happy'); wave();
+    showIntroLine(0, run);
+  }, 2650);
+}
+function showIntroLine(i, run){
+  if(run!==introRun) return;
+  if(i>=INTRO.length){ setTimeout(()=>{ if(run===introRun) finishIntro(); }, 400); return; }
+  if(i===1) flyer.classList.remove('happy');
+  introBubble.innerHTML=INTRO[i].html; introBubble.classList.remove('hidden');
+  speak(INTRO[i].say, ()=>showIntroLine(i+1, run));
+}
+function finishIntro(){
+  if(introDone) return; introDone=true; introRun++;
+  if(window.speechSynthesis) speechSynthesis.cancel();
+  flyer.classList.remove('flying','offstage','happy','talking');
+  introBubble.classList.add('hidden'); splash.classList.add('hidden'); skipBtn.classList.add('hidden');
+  app.classList.remove('hidden'); document.body.classList.remove('intro');
+  window.scrollTo(0,0);
+  requestAnimationFrame(()=>dock(()=>popMap()));
+}
+// Glide Kubee from the centre into her slot beside the map
+function dock(after){
+  const slot=document.getElementById('beeSlot'); const r=slot.getBoundingClientRect();
+  flyer.classList.add('docking');
+  flyer.style.left=(r.left+r.width/2)+'px';
+  flyer.style.top=(r.top+r.height/2)+'px';
+  flyer.style.width=r.width+'px';
+  setTimeout(()=>{
+    flyer.classList.remove('docking');
+    flyer.style.cssText='';
+    flyer.style.position='static'; flyer.style.transform='none'; flyer.style.width='100%';
+    slot.appendChild(flyer);
+    if(after) after();
+  }, 950);
+}
+function undock(){
+  if(flyer.parentElement!==document.body){ document.body.insertBefore(flyer, introBubble); }
+  flyer.style.cssText='';
+}
+document.getElementById('startBtn').onclick=startIntro;
+skipBtn.onclick=finishIntro;
+document.getElementById('replay').onclick=()=>{ startIntro(); };
+
+/* ---------- Flow map ---------- */
+const map=document.getElementById('map'), lines=document.getElementById('lines'), centerNode=document.getElementById('centerNode');
+const nodeEls=[], lineEls=[];
+NODES.forEach((n,i)=>{
+  const ang=(-90 + i*360/NODES.length)*Math.PI/180;
+  const x=50+42*Math.cos(ang), y=50+42*Math.sin(ang);
+  const ln=document.createElementNS('http://www.w3.org/2000/svg','line');
+  ln.setAttribute('x1',50); ln.setAttribute('y1',50); ln.setAttribute('x2',x); ln.setAttribute('y2',y);
+  lines.appendChild(ln); lineEls.push(ln);
+  const b=document.createElement('button');
+  b.type='button'; b.className='node'; b.style.left=x+'%'; b.style.top=y+'%';
+  b.innerHTML=`<span class="ic" aria-hidden="true">${n.icon}</span>${n.label}`;
+  b.onclick=()=>{ setActive(i); answer(ANSWERS[n.key], n.label); };
+  map.appendChild(b); nodeEls.push(b);
+});
+function resetMap(){ centerNode.classList.remove('in'); nodeEls.forEach(e=>e.classList.remove('in','active')); lineEls.forEach(l=>l.classList.remove('on','active')); }
+function popMap(){
+  centerNode.classList.add('in');
+  nodeEls.forEach((e,i)=>setTimeout(()=>{ e.classList.add('in'); lineEls[i].classList.add('on'); }, 250+i*110));
+}
+function setActive(i){
+  nodeEls.forEach((e,j)=>e.classList.toggle('active',i===j));
+  lineEls.forEach((l,j)=>l.classList.toggle('active',i===j));
+}
+
+/* ---------- Answers ---------- */
+const bubble=document.getElementById('bubble');
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function match(text){
   if(GREET_RE.test(text)) return GREETING;
-  const t=text.toLowerCase();
-  let best=null, score=0;
+  const t=text.toLowerCase(); let best=null, score=0;
   for(const a of Object.values(ANSWERS)){
     const s=a.keys.reduce((n,k)=>n+(t.includes(k)?k.length:0),0);
     if(s>score){score=s;best=a;}
   }
   return best||FALLBACK;
 }
-
-let voices=[];
-function loadVoices(){ voices = window.speechSynthesis ? speechSynthesis.getVoices() : []; }
-if(window.speechSynthesis){ loadVoices(); speechSynthesis.onvoiceschanged=loadVoices; }
-function pickVoice(){
-  const en=voices.filter(v=>/^en/i.test(v.lang));
-  // Warmest-sounding female voices first (Edge natural voices, Mac, Chrome), then any female voice
-  const preferred=[/\bana\b/i, /jenny.*natural|aria.*natural|ava.*natural|emma.*natural/i,
-    /samantha/i, /google us english/i, /ava|allison|susan|zira|jenny|aria|karen|tessa|moira|serena|victoria|female/i];
-  for(const re of preferred){ const v=en.find(x=>re.test(x.name)); if(v) return v; }
-  return en[0] || null;
-}
-// Child-like voices (e.g. Edge's "Ana") already sound young, so they need less pitch lift
-function voiceTuning(v){
-  if(v && /\bana\b/i.test(v.name)) return {pitch:1.15, rate:0.98};
-  return {pitch:1.55, rate:1.0};   // little-girl lift for adult voices, slightly slower for warmth
-}
-
 function answer(a, asked){
-  bubble.innerHTML = `<div class="q">${escapeHtml(asked)}</div><div>${a.html}</div>`;
-  stage.classList.remove('waving'); void stage.offsetWidth; stage.classList.add('waving');
-  setTimeout(()=>stage.classList.remove('waving'),1600);
-  if(a===GREETING){
-    stage.classList.add('happy');
-    clearTimeout(window._happyT);
-    window._happyT=setTimeout(()=>stage.classList.remove('happy'),2600);
-  } else {
-    stage.classList.remove('happy');
-  }
+  bubble.innerHTML=`<div class="q">${escapeHtml(asked)}</div><div>${a.html}</div>`;
+  wave();
+  if(a===GREETING){ flyer.classList.add('happy'); clearTimeout(window._hT); window._hT=setTimeout(()=>flyer.classList.remove('happy'),2600); }
+  else flyer.classList.remove('happy');
+  const idx=NODES.findIndex(n=>ANSWERS[n.key]===a); setActive(idx);
+  if(window.innerWidth<=900) bubble.scrollIntoView({behavior:'smooth',block:'center'});
   speak(a.say);
 }
-function speak(text){
-  if(!voiceOn.checked || !window.speechSynthesis) return;
-  speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(text);
-  const v=pickVoice(); if(v) u.voice=v;
-  const t=voiceTuning(v); u.pitch=t.pitch; u.rate=t.rate;
-  u.onstart=()=>stage.classList.add('talking');
-  u.onend=u.onerror=()=>stage.classList.remove('talking');
-  speechSynthesis.speak(u);
-}
-voiceOn.onchange=()=>{ if(!voiceOn.checked && window.speechSynthesis){speechSynthesis.cancel();stage.classList.remove('talking');} };
-
-function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-
+voiceOn.onchange=()=>{ if(!voiceOn.checked && window.speechSynthesis){speechSynthesis.cancel();flyer.classList.remove('talking');} };
 document.getElementById('askForm').onsubmit=e=>{
-  e.preventDefault();
-  const inp=document.getElementById('askInput'); const t=inp.value.trim();
+  e.preventDefault(); const inp=document.getElementById('askInput'); const t=inp.value.trim();
   if(!t) return; answer(match(t), t); inp.value='';
 };
 
-// Voice questions (Chrome / Edge / Safari)
-const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-const mic=document.getElementById('mic'); const note=document.getElementById('micNote');
+/* ---------- Voice questions ---------- */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+const mic=document.getElementById('mic'), note=document.getElementById('micNote');
 if(!SR){ mic.disabled=true; mic.style.opacity=.45; note.textContent='🎤 Voice questions work in Chrome, Edge or Safari.'; }
 else{
   const rec=new SR(); rec.lang='en-US'; rec.interimResults=false; rec.maxAlternatives=1;
