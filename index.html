@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ask Kubee · Sravani Ella</title>
+<meta name="description" content="Sravani Ella – Site Reliability / DevOps / Kubernetes Engineer. Ask Kubee anything a recruiter would ask.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --honey:#FFC93C; --honey-deep:#F4A100; --ink:#1F2A44; --sky:#5B8DEF; --mint:#2EC4B6;
+    --pink:#FF6B9A; --lilac:#9B7BFF; --paper:#FFFDF6; --muted:#5d6680;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Nunito',system-ui,sans-serif;color:var(--ink);min-height:100vh;
+    background:
+      radial-gradient(circle at 10% 10%, #FFE9A8 0, transparent 40%),
+      radial-gradient(circle at 90% 20%, #CDE0FF 0, transparent 40%),
+      radial-gradient(circle at 80% 90%, #FFD3E2 0, transparent 40%),
+      radial-gradient(circle at 15% 85%, #C9F5EF 0, transparent 40%),
+      var(--paper);
+    overflow-x:hidden;
+  }
+  /* honeycomb pattern */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;opacity:.07;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='98' viewBox='0 0 56 98'%3E%3Cpath d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='%23F4A100' stroke-width='2'/%3E%3Cpath d='M28 0L28 34L0 50L0 84L28 100L56 84L56 50L28 34' fill='none' stroke='%23F4A100' stroke-width='2'/%3E%3C/svg%3E");
+  }
+  header{max-width:1100px;margin:0 auto;padding:22px 20px 0;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .brand{font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.5rem}
+  .brand span{color:var(--honey-deep)}
+  .links{display:flex;gap:8px;flex-wrap:wrap}
+  .links a{
+    text-decoration:none;font-weight:700;font-size:.9rem;color:#fff;padding:8px 14px;border-radius:999px;
+    background:var(--ink);transition:transform .15s;
+  }
+  .links a:nth-child(1){background:#0A66C2}
+  .links a:nth-child(2){background:#24292f}
+  .links a:nth-child(3){background:var(--pink)}
+  .links a:hover{transform:translateY(-2px)}
+
+  main{max-width:1100px;margin:0 auto;padding:20px;display:grid;grid-template-columns:minmax(260px,400px) 1fr;gap:28px;align-items:center}
+  main>*{min-width:0}
+  @media (max-width:820px){main{grid-template-columns:1fr}#kubee{max-width:260px}}
+
+  .stage{position:relative;display:flex;flex-direction:column;align-items:center}
+  #kubee{width:100%;max-width:360px;height:auto;animation:float 3.2s ease-in-out infinite;filter:drop-shadow(0 18px 18px rgba(31,42,68,.18))}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+  .wing{transform-box:fill-box;transform-origin:bottom center;animation:flap .18s ease-in-out infinite alternate}
+  .wing.r{animation-delay:.09s}
+  @keyframes flap{from{transform:rotate(-8deg) scaleY(1)}to{transform:rotate(8deg) scaleY(.85)}}
+  #arm{transform-box:view-box;transform-origin:262px 228px;transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+  .waving #arm{animation:wave .5s ease-in-out 3}
+  @keyframes wave{0%,100%{transform:rotate(0)}50%{transform:rotate(-28deg)}}
+  .sparkle{opacity:0}
+  .waving .sparkle{animation:spark .5s ease-out 3}
+  .sparkle:nth-of-type(2){animation-delay:.1s}.sparkle:nth-of-type(3){animation-delay:.2s}
+  @keyframes spark{0%{opacity:0;transform:scale(.3)}50%{opacity:1;transform:scale(1.2)}100%{opacity:0;transform:scale(.6)}}
+  .sparkle{transform-box:fill-box;transform-origin:center}
+  #mouth{transition:all .1s}
+  .talking #mouth{animation:talk .22s ease-in-out infinite alternate}
+  @keyframes talk{from{transform:scaleY(.4)}to{transform:scaleY(1.2)}}
+  #mouth{transform-box:fill-box;transform-origin:center}
+  .eye{transform-box:fill-box;transform-origin:center;animation:blink 4.5s infinite}
+  @keyframes blink{0%,94%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+  .shadow{width:160px;height:18px;border-radius:50%;background:rgba(31,42,68,.12);margin-top:-6px;animation:shadow 3.2s ease-in-out infinite}
+  @keyframes shadow{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.8)}}
+
+  .panel{display:flex;flex-direction:column;gap:16px}
+  h1{font-family:'Fredoka',sans-serif;font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.1}
+  h1 .hl{background:linear-gradient(90deg,var(--honey-deep),var(--pink),var(--lilac));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:var(--muted);font-weight:600}
+  .bubble{
+    position:relative;background:#fff;border:3px solid var(--ink);border-radius:22px;padding:18px 20px;min-height:150px;
+    box-shadow:6px 6px 0 var(--honey);font-size:1.02rem;line-height:1.55;
+  }
+  .bubble::before{content:"";position:absolute;left:-16px;top:40px;border:13px solid transparent;border-right-color:var(--ink)}
+  .bubble::after{content:"";position:absolute;left:-10px;top:42px;border:11px solid transparent;border-right-color:#fff}
+  @media (max-width:820px){.bubble::before{left:40px;top:-26px;border-right-color:transparent;border-bottom-color:var(--ink)}.bubble::after{left:42px;top:-21px;border-right-color:transparent;border-bottom-color:#fff}}
+  .bubble .q{font-family:'Fredoka',sans-serif;color:var(--sky);font-weight:600;margin-bottom:6px}
+  .bubble ul{margin:6px 0 0 18px}
+  .bubble b{color:var(--ink)}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{
+    font:inherit;font-weight:700;font-size:.9rem;border:2px solid var(--ink);background:#fff;color:var(--ink);
+    padding:7px 13px;border-radius:999px;cursor:pointer;transition:all .15s;
+  }
+  .chip:hover,.chip:focus-visible{transform:translateY(-2px);box-shadow:3px 3px 0 var(--ink);outline:none}
+  .chip:nth-child(5n+1):hover{background:#FFE9A8}.chip:nth-child(5n+2):hover{background:#CDE0FF}
+  .chip:nth-child(5n+3):hover{background:#C9F5EF}.chip:nth-child(5n+4):hover{background:#FFD3E2}.chip:nth-child(5n+5):hover{background:#E4DBFF}
+  .ask{display:flex;gap:8px}
+  .ask input{
+    flex:1;font:inherit;padding:12px 16px;border-radius:999px;border:2px solid var(--ink);background:#fff;min-width:0;
+  }
+  .ask input:focus{outline:3px solid var(--honey);outline-offset:1px}
+  .btn{font:inherit;font-weight:700;border:2px solid var(--ink);border-radius:999px;padding:0 16px;cursor:pointer;background:var(--honey);color:var(--ink)}
+  .btn:hover{background:var(--honey-deep)}
+  #mic{width:50px;padding:0;font-size:1.3rem;background:var(--mint)}
+  #mic.listening{background:var(--pink);animation:pulse 1s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,107,154,.6)}100%{box-shadow:0 0 0 14px rgba(255,107,154,0)}}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:.88rem;color:var(--muted);font-weight:600}
+  .toggle{display:flex;align-items:center;gap:6px;cursor:pointer}
+  footer{text-align:center;padding:24px 16px 30px;color:var(--muted);font-size:.85rem}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Sravani <span>Ella</span></div>
+  <nav class="links">
+    <a href="https://www.linkedin.com/in/sravani-ella" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://github.com/Sravani205" target="_blank" rel="noopener">GitHub</a>
+    <a href="mailto:sravaniella205@gmail.com">Email me</a>
+  </nav>
+</header>
+
+<main>
+  <div class="stage" id="stage">
+    <!-- Kubee the bee: original SVG -->
+    <svg id="kubee" viewBox="0 0 360 360" role="img" aria-label="Kubee, a friendly bee holding a magic wand">
+      <!-- wings -->
+      <g opacity=".85">
+        <ellipse class="wing l" cx="140" cy="118" rx="38" ry="58" fill="#DFF3FF" stroke="#1F2A44" stroke-width="4" transform="rotate(-25 140 118)"/>
+        <ellipse class="wing r" cx="215" cy="114" rx="38" ry="58" fill="#DFF3FF" stroke="#1F2A44" stroke-width="4" transform="rotate(22 215 114)"/>
+      </g>
+      <!-- antennae -->
+      <path d="M155 92 Q140 50 118 46" fill="none" stroke="#1F2A44" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="116" cy="45" r="9" fill="#FF6B9A" stroke="#1F2A44" stroke-width="4"/>
+      <path d="M200 92 Q215 50 240 44" fill="none" stroke="#1F2A44" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="242" cy="43" r="9" fill="#FF6B9A" stroke="#1F2A44" stroke-width="4"/>
+      <!-- stinger -->
+      <path d="M178 318 L170 296 L188 296 Z" fill="#1F2A44"/>
+      <!-- body -->
+      <ellipse cx="178" cy="228" rx="78" ry="76" fill="#FFC93C" stroke="#1F2A44" stroke-width="5"/>
+      <clipPath id="bodyClip"><ellipse cx="178" cy="228" rx="76" ry="74"/></clipPath>
+      <g clip-path="url(#bodyClip)" fill="#1F2A44">
+        <rect x="90" y="214" width="180" height="20"/>
+        <rect x="90" y="252" width="180" height="20"/>
+        <rect x="90" y="288" width="180" height="20"/>
+      </g>
+      <!-- Kubernetes-style helm badge on belly -->
+      <g transform="translate(178 196) scale(.8)">
+        <circle r="17" fill="#5B8DEF" stroke="#1F2A44" stroke-width="3"/>
+        <circle r="6" fill="none" stroke="#fff" stroke-width="3"/>
+        <g stroke="#fff" stroke-width="3" stroke-linecap="round">
+          <line x1="0" y1="-7" x2="0" y2="-13"/><line x1="0" y1="7" x2="0" y2="13"/>
+          <line x1="-7" y1="0" x2="-13" y2="0"/><line x1="7" y1="0" x2="13" y2="0"/>
+          <line x1="-5" y1="-5" x2="-9" y2="-9"/><line x1="5" y1="5" x2="9" y2="9"/>
+          <line x1="5" y1="-5" x2="9" y2="-9"/><line x1="-5" y1="5" x2="-9" y2="9"/>
+        </g>
+      </g>
+      <!-- left arm -->
+      <path d="M104 220 Q80 236 86 256" fill="none" stroke="#1F2A44" stroke-width="6" stroke-linecap="round"/>
+      <!-- head -->
+      <circle cx="178" cy="128" r="58" fill="#FFC93C" stroke="#1F2A44" stroke-width="5"/>
+      <!-- cheeks -->
+      <circle cx="140" cy="146" r="10" fill="#FF9DB8" opacity=".8"/>
+      <circle cx="216" cy="146" r="10" fill="#FF9DB8" opacity=".8"/>
+      <!-- eyes -->
+      <g class="eye"><ellipse cx="156" cy="124" rx="11" ry="14" fill="#1F2A44"/><circle cx="160" cy="118" r="4" fill="#fff"/></g>
+      <g class="eye"><ellipse cx="200" cy="124" rx="11" ry="14" fill="#1F2A44"/><circle cx="204" cy="118" r="4" fill="#fff"/></g>
+      <!-- mouth -->
+      <ellipse id="mouth" cx="178" cy="152" rx="10" ry="7" fill="#C2185B" stroke="#1F2A44" stroke-width="3"/>
+      <!-- right arm with wand -->
+      <g id="arm">
+        <path d="M252 222 Q280 214 292 190" fill="none" stroke="#1F2A44" stroke-width="6" stroke-linecap="round"/>
+        <line x1="292" y1="192" x2="312" y2="136" stroke="#9B7BFF" stroke-width="6" stroke-linecap="round"/>
+        <path d="M314 112 l6 14 15 2 -11 10 3 15 -13 -8 -13 8 3 -15 -11 -10 15 -2z" fill="#FFC93C" stroke="#1F2A44" stroke-width="3" stroke-linejoin="round"/>
+        <g>
+          <path class="sparkle" d="M340 96 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z" fill="#FF6B9A"/>
+          <path class="sparkle" d="M296 98 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2z" fill="#2EC4B6"/>
+          <path class="sparkle" d="M346 146 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2z" fill="#5B8DEF"/>
+        </g>
+      </g>
+    </svg>
+    <div class="shadow"></div>
+  </div>
+
+  <section class="panel">
+    <div>
+      <h1>Hi, I'm Kubee 🐝<br><span class="hl">Ask me about Sravani!</span></h1>
+      <p class="sub">Site Reliability · DevOps · Kubernetes Engineer · St. Louis, MO</p>
+    </div>
+
+    <div class="bubble" id="bubble" aria-live="polite">
+      <div class="q">Buzz buzz! 👋</div>
+      <div id="answer">I'm Kubee, Sravani's assistant. Tap a question below, type your own, or press 🎤 and ask me out loud. I'll answer like a recruiter screen, minus the scheduling emails!</div>
+    </div>
+
+    <div class="chips" id="chips" aria-label="Suggested questions"></div>
+
+    <form class="ask" id="askForm">
+      <label for="askInput" class="sr">Ask a question</label>
+      <input id="askInput" type="text" placeholder="e.g. What Kubernetes work has she done?" autocomplete="off">
+      <button class="btn" type="submit">Ask</button>
+      <button class="btn" type="button" id="mic" title="Ask out loud" aria-label="Ask with your voice">🎤</button>
+    </form>
+
+    <div class="row">
+      <label class="toggle"><input type="checkbox" id="voiceOn" checked> Kubee speaks answers</label>
+      <span id="micNote"></span>
+    </div>
+  </section>
+</main>
+
+<footer>Built by Sravani Ella · Kubee is an original character · Hosted on GitHub Pages</footer>
+
+<script>
+const ANSWERS = {
+  intro: {
+    q: "Tell me about yourself",
+    keys: ["about","yourself","intro","introduce","who","summary","background","tell me"],
+    html: `Sravani is a <b>Cloud / Site Reliability Engineer</b> with <b>3.5 years</b> of production experience at Tata Consultancy Services. She kept <b>200+ Kubernetes clusters</b> across 4 Rancher instances stable, resolved <b>490+ infrastructure tickets</b> including critical incidents, and was named <b>Employee of the Month</b>. She's now in St. Louis, MO, building GitOps and observability projects and preparing for her CKA.`,
+    say: "Sravani is a Cloud and Site Reliability Engineer with three and a half years of production experience at Tata Consultancy Services. She kept more than two hundred Kubernetes clusters stable, resolved over four hundred ninety infrastructure tickets, and was named Employee of the Month."
+  },
+  experience: {
+    q: "What was her role at TCS?",
+    keys: ["experience","tcs","tata","work","job","role","company","previous","responsibilit"],
+    html: `<b>Cloud Engineer, TCS, Hyderabad (Aug 2021 – Mar 2025)</b>, Second Line Support team:
+      <ul>
+        <li>Built Kubernetes clusters for clients: firewall openings, DNS mapping, NFS, Ceph and block storage; built clusters from scratch with RKE</li>
+        <li>Control-plane and worker-node release upgrades, Helm upgrades with validation</li>
+        <li>Keycloak SSO with LDAP so users accessed clusters without direct credentials</li>
+        <li>Prometheus and Grafana alerting, incident response, root-cause analysis, runbooks</li>
+      </ul>`,
+    say: "At TCS, from 2021 to 2025, Sravani was a Cloud Engineer on the Second Line Support team. She built and upgraded Kubernetes clusters, set up Keycloak single sign-on with LDAP, and handled monitoring, incident response and root cause analysis."
+  },
+  k8s: {
+    q: "What Kubernetes work has she done?",
+    keys: ["kubernetes work","kubernetes experience","k8s experience","kubernetes","k8s","cluster","rancher","rke","helm","container","docker"],
+    html: `Kubernetes is her core strength:
+      <ul>
+        <li>Operated <b>200+ clusters</b> through 4 Rancher instances</li>
+        <li>Cluster builds with RKE, networking with <b>Calico and Flannel</b>, storage with NFS and Ceph</li>
+        <li>Release upgrades of control plane and worker nodes, Helm and Kustomize</li>
+        <li>Troubleshooting is her favourite part, she resolved critical SSO, Keycloak and PostgreSQL split-brain incidents</li>
+      </ul>`,
+    say: "Kubernetes is her core strength. She operated more than two hundred clusters through Rancher, built clusters with RKE, worked with Calico, Flannel, NFS and Ceph, ran release upgrades, and loves troubleshooting."
+  },
+  skills: {
+    q: "What are her technical skills?",
+    keys: ["skill","tech","stack","tools","aws","azure","terraform","ansible","python","bash","linux","know"],
+    html: `<ul>
+      <li><b>Kubernetes:</b> Rancher, RKE, EKS, AKS, Helm, Kustomize, Docker, Istio, Gateway API</li>
+      <li><b>Cloud:</b> AWS (EKS, EC2, IAM, S3, Route 53, CloudWatch), Azure</li>
+      <li><b>CI/CD &amp; IaC:</b> Argo CD, Argo Workflows, Jenkins, Terraform, Ansible, Git</li>
+      <li><b>Observability:</b> Prometheus, Grafana, Datadog, SLIs/SLOs</li>
+      <li><b>Identity:</b> Keycloak, LDAP, SSO</li>
+      <li><b>Scripting:</b> Linux, Bash, Python</li></ul>`,
+    say: "Her stack covers Kubernetes with Rancher, EKS and Helm, AWS and Azure, Argo CD, Jenkins and Terraform, Prometheus, Grafana and Datadog, Keycloak and LDAP, plus Linux, Bash and Python."
+  },
+  projects: {
+    q: "What projects has she built?",
+    keys: ["project","built","build","portfolio","github","gitops","argo","jenkins","datadog"],
+    html: `<b>Kubernetes Delivery Platform</b> (CI/CD + GitOps):
+      <ul>
+        <li>Flask app with pytest tests, containerized with Docker</li>
+        <li>Helm chart deployed to a kind cluster, with upgrade and rollback</li>
+        <li>Jenkins pipeline: test → build → load → Helm deploy</li>
+        <li>Argo CD GitOps with auto-sync and self-heal</li>
+        <li>Datadog dashboards, monitors and SLOs</li></ul>
+      And you're looking at another one: <b>me, Kubee!</b> 🐝`,
+    say: "She built a Kubernetes delivery platform: a Flask app with tests, Docker, Helm on a kind cluster, a Jenkins pipeline, Argo CD GitOps with self healing, and Datadog monitoring. And I'm one of her projects too!"
+  },
+  certs: {
+    q: "Certifications?",
+    keys: ["cert","certified","certification","cka","credential","google","exam"],
+    html: `<ul>
+      <li>Datadog: Getting Started with Kubernetes Observability (2026)</li>
+      <li>Google Cloud Associate Cloud Engineer (earned 2023)</li>
+      <li>Microsoft Azure Security Engineer Associate (earned 2023)</li>
+      <li>Currently preparing for the <b>Certified Kubernetes Administrator (CKA)</b></li></ul>`,
+    say: "She earned the Google Cloud Associate Cloud Engineer and Azure Security Engineer certifications in 2023, completed Datadog's Kubernetes observability course, and is preparing for the Certified Kubernetes Administrator exam."
+  },
+  education: {
+    q: "Education?",
+    keys: ["education","degree","college","school","study","studied","university","btech","b.tech"],
+    html: `<b>B.Tech</b>, G.V.P. College of Engineering (A), 2021, CGPA <b>8.2</b>. Her final-year internship at TCS was a Diabetic Retinopathy detection Android app: a TensorFlow model running on-device with Qualcomm SNPE to pre-screen eye images.`,
+    say: "She has a B Tech from G V P College of Engineering, graduating in 2021 with a CGPA of 8.2. Her internship project was an Android app that pre-screens eye images for diabetic retinopathy."
+  },
+  why: {
+    q: "Why should we hire her?",
+    keys: ["why","hire","strength","stand out","different","fit","good"],
+    html: `<ul>
+      <li><b>Scale:</b> she's kept 200+ production clusters healthy</li>
+      <li><b>Calm under pressure:</b> 490+ tickets and critical incidents resolved with real root-cause analysis</li>
+      <li><b>Keeps learning:</b> picked up AWS, Terraform, Argo CD and Datadog on her own and built projects with them</li>
+      <li><b>Team player:</b> wrote onboarding guides and runbooks so others could solve problems faster, and was Employee of the Month</li></ul>`,
+    say: "She has run Kubernetes at real scale, stays calm in incidents, keeps learning new tools by building with them, and makes her team better with clear documentation."
+  },
+  location: {
+    q: "Remote or relocation?",
+    keys: ["remote","relocat","location","where","based","onsite","hybrid","move","live"],
+    html: `She's based in <b>St. Louis, MO</b>. She loves <b>remote</b> roles, and she's also open to hybrid, onsite, or <b>relocating</b> anywhere in the US for the right opportunity.`,
+    say: "She's based in St. Louis, Missouri. She loves remote work and is also open to hybrid, onsite, or relocating anywhere in the US."
+  },
+  roles: {
+    q: "What roles is she looking for?",
+    keys: ["looking","roles","position","target","seeking","want","interested","available"],
+    html: `<b>Site Reliability Engineer</b>, <b>DevOps / Platform Engineer</b>, <b>Cloud / Kubernetes Engineer</b>, and <b>Cloud Support Engineer</b> roles. She's available and ready to start.`,
+    say: "She's looking for Site Reliability, DevOps or Platform, Cloud and Kubernetes, and Cloud Support Engineer roles."
+  },
+  contact: {
+    q: "How do I contact her?",
+    keys: ["contact","email","phone","reach","call","linkedin","connect","resume"],
+    html: `📧 <a href="mailto:sravaniella205@gmail.com">sravaniella205@gmail.com</a><br>📞 +1 557-219-1292<br>💼 <a href="https://www.linkedin.com/in/sravani-ella" target="_blank" rel="noopener">LinkedIn</a> · 💻 <a href="https://github.com/Sravani205" target="_blank" rel="noopener">GitHub</a>`,
+    say: "You can email her at sravaniella205 at gmail dot com, or connect with her on LinkedIn. The links are right here!"
+  }
+};
+const FALLBACK = {
+  q:"Hmm, buzzing on that one!",
+  html:`I don't have that answer in my hive yet. Try one of the questions below, or <a href="mailto:sravaniella205@gmail.com">email Sravani</a> directly. She'd love to hear from you!`,
+  say:"I don't have that answer yet. Try one of the suggested questions, or email Sravani directly."
+};
+
+const stage = document.getElementById('stage');
+const bubble = document.getElementById('bubble');
+const chips = document.getElementById('chips');
+const voiceOn = document.getElementById('voiceOn');
+
+Object.entries(ANSWERS).forEach(([id,a])=>{
+  const b=document.createElement('button');
+  b.className='chip'; b.type='button'; b.textContent=a.q;
+  b.onclick=()=>answer(a, a.q);
+  chips.appendChild(b);
+});
+
+function match(text){
+  const t=text.toLowerCase();
+  let best=null, score=0;
+  for(const a of Object.values(ANSWERS)){
+    const s=a.keys.reduce((n,k)=>n+(t.includes(k)?k.length:0),0);
+    if(s>score){score=s;best=a;}
+  }
+  return best||FALLBACK;
+}
+
+let voices=[];
+function loadVoices(){ voices = window.speechSynthesis ? speechSynthesis.getVoices() : []; }
+if(window.speechSynthesis){ loadVoices(); speechSynthesis.onvoiceschanged=loadVoices; }
+function pickVoice(){
+  const en=voices.filter(v=>/^en/i.test(v.lang));
+  const female=/samantha|victoria|karen|moira|tessa|serena|zira|aria|jenny|female|susan|allison|ava|google us english/i;
+  return en.find(v=>female.test(v.name)) || en[0] || null;
+}
+
+function answer(a, asked){
+  bubble.innerHTML = `<div class="q">${escapeHtml(asked)}</div><div>${a.html}</div>`;
+  stage.classList.remove('waving'); void stage.offsetWidth; stage.classList.add('waving');
+  setTimeout(()=>stage.classList.remove('waving'),1600);
+  speak(a.say);
+}
+function speak(text){
+  if(!voiceOn.checked || !window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v) u.voice=v;
+  u.pitch=0.8; u.rate=1;
+  u.onstart=()=>stage.classList.add('talking');
+  u.onend=u.onerror=()=>stage.classList.remove('talking');
+  speechSynthesis.speak(u);
+}
+voiceOn.onchange=()=>{ if(!voiceOn.checked && window.speechSynthesis){speechSynthesis.cancel();stage.classList.remove('talking');} };
+
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+document.getElementById('askForm').onsubmit=e=>{
+  e.preventDefault();
+  const inp=document.getElementById('askInput'); const t=inp.value.trim();
+  if(!t) return; answer(match(t), t); inp.value='';
+};
+
+// Voice questions (Chrome / Edge / Safari)
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+const mic=document.getElementById('mic'); const note=document.getElementById('micNote');
+if(!SR){ mic.disabled=true; mic.style.opacity=.45; note.textContent='🎤 Voice questions work in Chrome, Edge or Safari.'; }
+else{
+  const rec=new SR(); rec.lang='en-US'; rec.interimResults=false; rec.maxAlternatives=1;
+  mic.onclick=()=>{ try{ if(window.speechSynthesis) speechSynthesis.cancel(); rec.start(); }catch(e){} };
+  rec.onstart=()=>{ mic.classList.add('listening'); note.textContent='Listening… ask your question'; };
+  rec.onend=()=>{ mic.classList.remove('listening'); if(note.textContent.startsWith('Listening')) note.textContent=''; };
+  rec.onerror=e=>{ note.textContent = e.error==='not-allowed' ? 'Please allow microphone access to ask out loud.' : 'Didn’t catch that, try again or type it.'; };
+  rec.onresult=e=>{ const t=e.results[0][0].transcript; note.textContent=''; answer(match(t), t); };
+}
+</script>
+</body>
+</html>
