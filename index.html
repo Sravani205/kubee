@@ -451,6 +451,12 @@ const ANSWERS = {
     html: `<b>Site Reliability Engineer</b>, <b>DevOps / Platform Engineer</b>, <b>Cloud / Kubernetes Engineer</b>, and <b>Cloud Support Engineer</b> roles. She's <b>available immediately</b>, no notice period.`,
     say: "She's looking for Site Reliability, DevOps or Platform, Cloud and Kubernetes, and Cloud Support Engineer roles. She's available immediately."
   },
+  funny: {
+    q: "Something funny about her",
+    keys: ["funny","fun fact","fun fact about","something fun","joke","a joke","tell me a joke","joking","humor","humour","interesting","surprise","quirk","laugh"],
+    html: `She's so into reliability that even her recipes have a <b>rollback plan</b>. 🍳🔁`,
+    say: "She's so into reliability that even her recipes have a rollback plan."
+  },
   personal: {
     q: "Salary or visa",
     keys: ["salary","compensation","pay ","package","ctc","expected pay","visa","sponsor","work authoriz","authorization","h1b","h-1b","green card","immigration"],
@@ -542,6 +548,10 @@ function pickVoice(){
 }
 const TONE={pitch:1.05, rate:0.96};   // warm, calm, a little lower
 const voiceOn=document.getElementById('voiceOn');
+// Remember the visitor's "Do you want to hear from me?" choice until they uncheck it (also survives a reload)
+function savedVoice(){ try{ return localStorage.getItem('kubeeVoice')==='on'; }catch(e){ return false; } }
+function saveVoice(on){ try{ localStorage.setItem('kubeeVoice', on?'on':'off'); }catch(e){} }
+voiceOn.checked=savedVoice();
 const flyer=document.getElementById('flyer');
 
 // speak(text, done): calls done when finished; falls back to a reading-time timer without voice
@@ -649,7 +659,7 @@ function finishIntro(){
   introBubble.classList.add('hidden'); splash.classList.add('hidden'); skipBtn.classList.add('hidden');
   app.classList.remove('hidden'); document.body.classList.remove('intro');
   window.scrollTo(0,0);
-  voiceOn.checked=false;   // quiet after the intro; visitors tick "Do you want to hear from me?" to hear answers
+  voiceOn.checked=savedVoice();   // stays the way the visitor left it; off until they tick "Do you want to hear from me?"
   requestAnimationFrame(()=>dock(()=>popMap()));
 }
 // Glide Kubee from the centre into her slot beside the map
@@ -721,7 +731,7 @@ function answer(a, asked){
   if(window.innerWidth<=900) bubble.scrollIntoView({behavior:'smooth',block:'center'});
   speak(a.say);
 }
-voiceOn.onchange=()=>{ if(!voiceOn.checked && window.speechSynthesis){speechSynthesis.cancel();flyer.classList.remove('talking');} };
+voiceOn.onchange=()=>{ saveVoice(voiceOn.checked); if(!voiceOn.checked && window.speechSynthesis){speechSynthesis.cancel();flyer.classList.remove('talking');} };
 document.getElementById('askForm').onsubmit=e=>{
   e.preventDefault(); const inp=document.getElementById('askInput'); const t=inp.value.trim();
   if(!t) return; answer(match(t), t); inp.value='';
