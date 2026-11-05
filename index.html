@@ -3,17 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light only">
+<meta name="theme-color" content="#FFFDF6">
 <title>Ask Kubee · Sravani Ella</title>
 <meta name="description" content="Sravani Ella – Site Reliability / DevOps / Kubernetes Engineer. Meet Kubee and explore her work.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
+    color-scheme:only light;
     --honey:#FFC93C; --honey-deep:#F4A100; --ink:#1F2A44; --sky:#5B8DEF; --mint:#2EC4B6;
     --pink:#FF6B9A; --lilac:#9B7BFF; --paper:#FFFDF6; --muted:#5d6680;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{min-height:100%}
+  html{background:#FFFDF6}
   body{
     font-family:'Nunito',system-ui,sans-serif;color:var(--ink);min-height:100vh;overflow-x:hidden;
     background:
@@ -38,8 +42,8 @@
   #startBtn:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink)}
   @keyframes nudge{0%,100%{scale:1}50%{scale:1.05}}
   .hidden{opacity:0;pointer-events:none}
-  #skip{position:fixed;right:16px;bottom:16px;z-index:40;font:inherit;font-weight:700;font-size:.85rem;color:var(--muted);background:#fff;border:2px solid #d5d9e4;border-radius:999px;padding:6px 14px;cursor:pointer}
-  #skip:hover{border-color:var(--ink);color:var(--ink)}
+  #skip{position:fixed;right:16px;bottom:16px;z-index:40;font:inherit;font-weight:700;font-size:.9rem;color:var(--ink);background:var(--honey);border:2px solid var(--ink);border-radius:999px;padding:8px 16px;cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
+  #skip:hover{background:var(--honey-deep)}
 
   /* ---------- Flying Kubee ---------- */
   #flyer{position:fixed;z-index:25;width:min(300px,62vw);left:50%;top:44%;transform:translate(-50%,-50%);pointer-events:none}
@@ -65,6 +69,13 @@
     font-size:1.08rem;line-height:1.5;text-align:center;transition:opacity .4s}
   #introBubble::before{content:"";position:absolute;left:50%;top:-26px;margin-left:-13px;border:13px solid transparent;border-bottom-color:var(--ink)}
   #introBubble::after{content:"";position:absolute;left:50%;top:-19px;margin-left:-11px;border:11px solid transparent;border-bottom-color:#fff}
+
+  /* Phones: sit Kubee and her bubble higher so the screen doesn't look empty on top */
+  @media (max-width:600px){
+    #flyer{top:34%}
+    #introBubble{top:calc(34% + min(170px,36vw));font-size:1rem;padding:14px 16px}
+    #skip{bottom:calc(16px + env(safe-area-inset-bottom))}
+  }
 
   /* ---------- Kubee parts ---------- */
   .kubee-svg{width:100%;height:auto;display:block;filter:drop-shadow(0 18px 18px rgba(31,42,68,.18))}
@@ -505,7 +516,7 @@ function pathPoint(P,u){
 const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
 
 function flyMini(run, done){
-  const W=innerWidth, H=innerHeight, cx=.5, cy=.44;
+  const W=innerWidth, H=innerHeight, cx=.5, cy=(W<=600?.34:.44);
   const P=[[-.08,.30],[.18,.14],[.40,.30],[.26,.62],[.52,.80],[.80,.62],[.88,.30],[.66,.16],[.56,.34],[cx,cy]];
   const DUR=4200; let t0=null, lastX=null, dir=1;
   mini.style.opacity=1;
