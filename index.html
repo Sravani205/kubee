@@ -3,15 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="color-scheme" content="light only">
-<meta name="theme-color" content="#FFFDF6">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#FFFDF6">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#141A2E">
 <title>Ask Kubee · Sravani Ella</title>
 <meta name="description" content="Sravani Ella – Site Reliability / DevOps / Kubernetes Engineer. Meet Kubee and explore her work.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    color-scheme:only light;
+    color-scheme:light dark;
     --honey:#FFC93C; --honey-deep:#F4A100; --ink:#1F2A44; --sky:#5B8DEF; --mint:#2EC4B6;
     --pink:#FF6B9A; --lilac:#9B7BFF; --paper:#FFFDF6; --muted:#5d6680;
   }
@@ -171,6 +172,38 @@
   .row button{font:inherit;font-weight:700;background:none;border:none;color:var(--sky);cursor:pointer;text-decoration:underline}
   footer{text-align:center;padding:24px 16px 30px;color:var(--muted);font-size:.85rem}
   .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  /* ---------- Kubee's own dark mode (phones set to dark) ---------- */
+  @media (prefers-color-scheme:dark){
+    :root{--paper:#141A2E; --muted:#AEB6CC; --card:#1F2740; --text:#F5F1E6;}
+    html{background:#141A2E}
+    body{color:var(--text);background:
+      radial-gradient(circle at 10% 10%, rgba(255,201,60,.18) 0, transparent 40%),
+      radial-gradient(circle at 90% 20%, rgba(91,141,239,.18) 0, transparent 40%),
+      radial-gradient(circle at 80% 90%, rgba(255,107,154,.14) 0, transparent 40%),
+      radial-gradient(circle at 15% 85%, rgba(46,196,182,.14) 0, transparent 40%),
+      #141A2E}
+    body::before{opacity:.12}
+    .kubee-svg{filter:drop-shadow(0 0 2px rgba(255,255,255,.55)) drop-shadow(0 0 18px rgba(255,201,60,.35))}
+    #mini svg{filter:drop-shadow(0 0 2px rgba(255,255,255,.6))}
+    .shadow{background:rgba(0,0,0,.35)}
+    #introBubble,.bubble{background:var(--card);color:var(--text);border-color:var(--honey)}
+    #introBubble::before,.bubble::before{border-bottom-color:var(--honey)}
+    #introBubble::after,.bubble::after{border-bottom-color:var(--card)}
+    .bubble .q,.bubble a{color:#8FB2FF}
+    #startBtn{box-shadow:5px 5px 0 #000}
+    #skip{box-shadow:3px 3px 0 #000}
+    .links a:nth-child(2){background:#3A4256}
+    #lines line{stroke:#F5F1E6}
+    .node{background:var(--card);color:var(--text);border-color:#F5F1E6}
+    .node.active{background:var(--honey);color:var(--ink);border-color:var(--ink)}
+    .node.in:hover,.node.in:focus-visible{box-shadow:3px 3px 0 var(--honey)}
+    .center{border-color:#F5F1E6;box-shadow:5px 5px 0 #000;color:var(--ink)}
+    .center small{color:#4A5470}
+    .ask input{background:var(--card);color:var(--text);border-color:#F5F1E6}
+    .ask input::placeholder{color:var(--muted)}
+    .btn{border-color:#F5F1E6}
+    .row button{color:#8FB2FF}
+  }
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
