@@ -126,6 +126,10 @@
   .bubble ul{margin:6px 0 0 18px}
   .bubble a{color:var(--sky);font-weight:700}
 
+  .hear{display:flex;align-items:center;gap:10px;margin-top:6px;padding:10px 16px;border:2.5px solid var(--ink);border-radius:999px;
+    background:#fff;box-shadow:3px 3px 0 var(--honey);font-family:'Fredoka',sans-serif;font-weight:600;font-size:1rem;cursor:pointer;user-select:none}
+  .hear input{width:22px;height:22px;accent-color:var(--honey-deep);cursor:pointer;flex:none}
+  .hear:has(input:checked){background:var(--honey)}
   .right{display:flex;flex-direction:column;gap:14px}
   h1{font-family:'Fredoka',sans-serif;font-size:clamp(1.7rem,3.6vw,2.4rem);line-height:1.1}
   h1 .hl{background:linear-gradient(90deg,var(--honey-deep),var(--pink),var(--lilac));-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -203,6 +207,8 @@
     .ask input::placeholder{color:var(--muted)}
     .btn{border-color:#F5F1E6}
     .row button{color:#8FB2FF}
+    .hear{background:var(--card);color:var(--text);border-color:var(--honey);box-shadow:3px 3px 0 #000}
+    .hear:has(input:checked){background:var(--honey);color:var(--ink)}
   }
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -318,6 +324,10 @@
         <div class="q">Buzz buzz! 👋</div>
         <div>Tap any bubble on the map, type a question, or press 🎤 and ask me out loud.</div>
       </div>
+      <label class="hear" for="voiceOn">
+        <input type="checkbox" id="voiceOn">
+        <span>🔊 Do you want to hear from me?</span>
+      </label>
     </aside>
 
     <section class="right">
@@ -338,7 +348,6 @@
         <button class="btn" type="button" id="mic" title="Ask out loud" aria-label="Ask with your voice">🎤</button>
       </form>
       <div class="row">
-        <label><input type="checkbox" id="voiceOn" checked> Kubee speaks answers</label>
         <button type="button" id="replay">Replay intro</button>
         <span id="micNote"></span>
       </div>
@@ -438,9 +447,15 @@ const ANSWERS = {
   },
   roles: {
     q: "What roles is she looking for?",
-    keys: ["looking","roles","position","target","seeking","want","interested","available","start date","when can she start","join"],
-    html: `<b>Site Reliability Engineer</b>, <b>DevOps / Platform Engineer</b>, <b>Cloud / Kubernetes Engineer</b>, and <b>Cloud Support Engineer</b> roles. She's available and ready to start.`,
-    say: "She's looking for Site Reliability, DevOps or Platform, Cloud and Kubernetes, and Cloud Support Engineer roles."
+    keys: ["looking","roles","position","target","seeking","want","interested","available","start date","when can she start","join","notice","immediately","how soon"],
+    html: `<b>Site Reliability Engineer</b>, <b>DevOps / Platform Engineer</b>, <b>Cloud / Kubernetes Engineer</b>, and <b>Cloud Support Engineer</b> roles. She's <b>available immediately</b>, no notice period.`,
+    say: "She's looking for Site Reliability, DevOps or Platform, Cloud and Kubernetes, and Cloud Support Engineer roles. She's available immediately."
+  },
+  personal: {
+    q: "Salary or visa",
+    keys: ["salary","compensation","pay ","package","ctc","expected pay","visa","sponsor","work authoriz","authorization","h1b","h-1b","green card","immigration"],
+    html: `That's a conversation Sravani would love to have with you personally. 😊 Here's how to reach her:<br>📧 <a href="mailto:sravaniella205@gmail.com">sravaniella205@gmail.com</a> · 💼 <a href="https://www.linkedin.com/in/sravani-ella" target="_blank" rel="noopener">LinkedIn</a>`,
+    say: "That's a conversation Sravani would love to have with you personally. Here's how to reach her."
   },
   hobbies: {
     q: "What are her hobbies?",
@@ -460,11 +475,28 @@ const ANSWERS = {
     say: "You can email her at sravaniella205 at gmail dot com, or connect with her on LinkedIn. The links are right here!"
   }
 };
-const FALLBACK = {
-  q:"Hmm, buzzing on that one!",
-  html:`I don't have that answer in my hive yet. Tap a bubble on the map, or <a href="mailto:sravaniella205@gmail.com">email Sravani</a> directly. She'd love to hear from you!`,
-  say:"I don't have that answer yet. Tap a bubble on the map, or email Sravani directly."
-};
+// Funny "I don't know" lines for questions Kubee can't match (rotated, never the same twice in a row)
+const MAIL=`<br>📧 <a href="mailto:sravaniella205@gmail.com">sravaniella205@gmail.com</a> · 💼 <a href="https://www.linkedin.com/in/sravani-ella" target="_blank" rel="noopener">LinkedIn</a>`;
+const FALLBACK_LINES = [
+  {html:"Ooh, that one's not in my hive yet! 🐝 Buzz Sravani directly, she'd love to answer it herself.",
+   say:"Ooh, that one's not in my hive yet! Buzz Sravani directly, she'd love to answer it herself."},
+  {html:"I only carry the honey I've been given 🍯, and that answer isn't in my jar. Sravani has the full recipe, drop her an email!",
+   say:"I only carry the honey I've been given, and that answer isn't in my jar. Sravani has the full recipe, drop her an email!"},
+  {html:"My antennae aren't picking that one up! 📡 Try Sravani on her direct line, she always responds.",
+   say:"My antennae aren't picking that one up! Try Sravani directly, she always responds."},
+  {html:"Great question, too great for a tiny bee! 🐝✨ Let's get you to Sravani, she'll give you the full story.",
+   say:"Great question, too great for a tiny bee! Let's get you to Sravani, she'll give you the full story."},
+  {html:"I've checked every cell in the honeycomb… nothing! 🍯 Sravani is just one email away, though.",
+   say:"I've checked every cell in the honeycomb, nothing! Sravani is just one email away, though."},
+  {html:"Even with a magic wand ⭐, I can't conjure that answer. But Sravani can! Reach out to her here.",
+   say:"Even with a magic wand, I can't conjure that answer. But Sravani can! Reach out to her here."}
+];
+let lastFallback=-1;
+function fallback(){
+  let i; do{ i=Math.floor(Math.random()*FALLBACK_LINES.length); }while(i===lastFallback && FALLBACK_LINES.length>1);
+  lastFallback=i; const f=FALLBACK_LINES[i];
+  return {html:f.html+MAIL, say:f.say};
+}
 
 const GREETING = {
   q:"Hello there! 👋",
@@ -508,16 +540,16 @@ function pickVoice(){
   for(const re of preferred){ const v=en.find(x=>re.test(x.name)); if(v) return v; }
   return en[0] || null;
 }
-const TONE={pitch:1.25, rate:0.98};   // "Bright & youthful"
+const TONE={pitch:1.05, rate:0.96};   // warm, calm, a little lower
 const voiceOn=document.getElementById('voiceOn');
 const flyer=document.getElementById('flyer');
 
 // speak(text, done): calls done when finished; falls back to a reading-time timer without voice
-function speak(text, done){
+function speak(text, done, always){
   let finished=false;
   const finish=()=>{ if(finished) return; finished=true; flyer.classList.remove('talking'); if(done) done(); };
   const readMs=Math.max(2200, text.length*62);
-  if(!voiceOn.checked || !window.speechSynthesis){ setTimeout(finish, done?readMs:0); return; }
+  if((!voiceOn.checked && !always) || !window.speechSynthesis){ setTimeout(finish, done?readMs:0); return; }
   speechSynthesis.cancel();
   const u=new SpeechSynthesisUtterance(text);
   const v=pickVoice(); if(v) u.voice=v;
@@ -607,7 +639,7 @@ function showIntroLine(i, run){
   if(i>=INTRO.length){ setTimeout(()=>{ if(run===introRun) finishIntro(); }, 400); return; }
   if(i===1) flyer.classList.remove('happy');
   introBubble.innerHTML=INTRO[i].html; introBubble.classList.remove('hidden');
-  speak(INTRO[i].say, ()=>showIntroLine(i+1, run));
+  speak(INTRO[i].say, ()=>showIntroLine(i+1, run), true);  // the intro always speaks
 }
 function finishIntro(){
   if(introDone) return; introDone=true; introRun++;
@@ -617,6 +649,7 @@ function finishIntro(){
   introBubble.classList.add('hidden'); splash.classList.add('hidden'); skipBtn.classList.add('hidden');
   app.classList.remove('hidden'); document.body.classList.remove('intro');
   window.scrollTo(0,0);
+  voiceOn.checked=false;   // quiet after the intro; visitors tick "Do you want to hear from me?" to hear answers
   requestAnimationFrame(()=>dock(()=>popMap()));
 }
 // Glide Kubee from the centre into her slot beside the map
@@ -677,7 +710,7 @@ function match(text){
     const s=a.keys.reduce((n,k)=>n+(t.includes(k)?k.length:0),0);
     if(s>score){score=s;best=a;}
   }
-  return best||FALLBACK;
+  return best||fallback();
 }
 function answer(a, asked){
   bubble.innerHTML=`<div class="q">${escapeHtml(asked)}</div><div>${a.html}</div>`;
